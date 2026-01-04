@@ -13,7 +13,7 @@ import {
 import { Input } from '../ui/input'
 import { useAuth } from '../../context/AuthContext'
 
-export function LoginForm({
+export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<'form'>) {
@@ -22,7 +22,7 @@ export function LoginForm({
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const { login } = useAuth()
+  const { register } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,11 +31,11 @@ export function LoginForm({
     setLoading(true)
 
     try {
-      await login(email, password)
+      await register(email, password)
       navigate('/dashboard')
     } catch (err: unknown) {
       const error = err as { response?: { data?: { detail?: string } } }
-      setError(error.response?.data?.detail || 'Login failed')
+      setError(error.response?.data?.detail || 'Registration failed')
     } finally {
       setLoading(false)
     }
@@ -49,9 +49,9 @@ export function LoginForm({
     >
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
-          <h1 className="text-2xl font-bold">Login to your account</h1>
+          <h1 className="text-2xl font-bold">Create your account</h1>
           <p className="text-muted-foreground text-sm text-balance">
-            Enter your email below to login to your account
+            Enter your email below to create your account
           </p>
         </div>
         {error && (
@@ -71,15 +71,7 @@ export function LoginForm({
           />
         </Field>
         <Field>
-          <div className="flex items-center">
-            <FieldLabel htmlFor="password">Password</FieldLabel>
-            <a
-              href="#"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
-            >
-              Forgot your password?
-            </a>
-          </div>
+          <FieldLabel htmlFor="password">Password</FieldLabel>
           <div className="relative">
             <Input
               id="password"
@@ -87,6 +79,7 @@ export function LoginForm({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
               className="pr-10"
             />
             <button
@@ -102,10 +95,13 @@ export function LoginForm({
               )}
             </button>
           </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            Minimum 6 characters
+          </p>
         </Field>
         <Field>
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Creating account...' : 'Create Account'}
           </Button>
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
@@ -121,12 +117,12 @@ export function LoginForm({
                 fill="currentColor"
               />
             </svg>
-            Login with GitHub
+            Sign up with GitHub
           </Button>
           <FieldDescription className="text-center">
-            Don&apos;t have an account?{' '}
-            <Link to="/register" className="underline underline-offset-4">
-              Sign up
+            Already have an account?{' '}
+            <Link to="/login" className="underline underline-offset-4">
+              Sign in
             </Link>
           </FieldDescription>
         </Field>
@@ -134,3 +130,4 @@ export function LoginForm({
     </form>
   )
 }
+
