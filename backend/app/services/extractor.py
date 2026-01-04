@@ -4,6 +4,7 @@ Extracts tables from images using OpenAI API.
 """
 
 from typing import List, Dict, Any, Optional
+import json
 from app.services.openai_client import openai_client
 from app.models.enums import OutputFormat
 
@@ -24,8 +25,13 @@ def build_extraction_prompt(columns: Optional[List[str]] = None, multiple_tables
 """
 
     if columns:
-        prompt += f"""Extract only these columns: {', '.join(columns)}.
-If a column is not found in the table, include it with null values.
+        prompt += f"""Extract ONLY these specific columns: {', '.join(columns)}.
+IMPORTANT: 
+- Use the exact column names provided: {', '.join(columns)}
+- Map each column name exactly as specified (case-insensitive matching)
+- If a column is not found in the table, include it with null values
+- Do NOT rename columns or use generic names like "col1", "col2"
+- Preserve the exact column names in your output
 
 """
     else:
@@ -38,7 +44,29 @@ If a column is not found in the table, include it with null values.
 
 """
 
-    prompt += """Return the data in the following JSON format:
+    if columns:
+        # Use exact column names in the format
+        columns_json = json.dumps(columns)
+        prompt += f"""Return the data in the following JSON format:
+{{
+  "tables": [
+    {{
+      "table_index": 1,
+      "columns": {columns_json},
+      "rows": [
+        {{"{columns[0]}": "value1", "{columns[1] if len(columns) > 1 else 'column2'}": "value2", ...}},
+        ...
+      ]
+    }}
+  ]
+}}
+
+CRITICAL: Use the EXACT column names provided: {', '.join(columns)}
+Do NOT use generic names like "col1", "col2", or "column1", "column2".
+Each row object must use the exact column names: {', '.join(columns)}
+"""
+    else:
+        prompt += """Return the data in the following JSON format:
 {
   "tables": [
     {
@@ -51,7 +79,9 @@ If a column is not found in the table, include it with null values.
     }
   ]
 }
+"""
 
+    prompt += """
 If there is only one table, still wrap it in the "tables" array.
 Ensure all values are properly extracted and formatted.
 Return ONLY valid JSON, no additional text or markdown formatting."""

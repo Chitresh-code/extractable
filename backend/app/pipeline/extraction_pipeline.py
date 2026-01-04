@@ -156,6 +156,7 @@ async def run_extraction_pipeline(db: Session, extraction: Extraction, file=None
             validation_results=validation_results,
             multiple_tables=extraction.multiple_tables,
             complexity=extraction_complexity,
+            columns=extraction.columns_requested,
         )
         timing_metrics["step_4_finalization"] = time.time() - step_start
 
@@ -271,6 +272,18 @@ async def run_extraction_pipeline(db: Session, extraction: Extraction, file=None
                         "status": ExtractionStatus.FAILED.value,
                         "message": f"Extraction failed: {str(e)}",
                         "error": str(e),
+                    },
+                )
+
+                # Broadcast failure notification
+                await event_manager.broadcast(
+                    extraction.id,
+                    {
+                        "type": "notification",
+                        "extraction_id": extraction.id,
+                        "title": "Extraction Failed",
+                        "message": f"Extraction #{extraction.id} has failed: {str(e)}",
+                        "notification_type": "error",
                     },
                 )
                 logger.info(f"Broadcasted failure event for extraction {extraction.id}")

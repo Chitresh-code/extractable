@@ -104,7 +104,7 @@ export function LoginForm({
           </div>
         </Field>
         <Field>
-          <Button type="submit" disabled={loading} className="w-full">
+          <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
             {loading ? 'Logging in...' : 'Login'}
           </Button>
         </Field>

@@ -30,7 +30,7 @@ export const Login: React.FC = () => {
             </p>
             <div className="space-y-4 pt-4">
               <div className="flex items-start gap-3">
-                <div className="mt-1 flex-shrink-0">
+                <div className="mt-1 shrink-0">
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -53,7 +53,7 @@ export const Login: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="mt-1 flex-shrink-0">
+                <div className="mt-1 shrink-0">
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -76,7 +76,7 @@ export const Login: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="mt-1 flex-shrink-0">
+                <div className="mt-1 shrink-0">
                   <svg
                     className="w-5 h-5"
                     fill="none"

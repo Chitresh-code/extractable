@@ -60,13 +60,15 @@ export const extractionApi = {
     file: File,
     columns?: string,
     multipleTables?: boolean,
-    complexity?: 'simple' | 'regular' | 'complex'
+    complexity?: 'simple' | 'regular' | 'complex',
+    priority?: 'high' | 'medium' | 'low'
   ): Promise<Extraction> => {
     const formData = new FormData()
     formData.append('file', file)
     if (columns) formData.append('columns', columns)
     if (multipleTables !== undefined) formData.append('multiple_tables', String(multipleTables))
     if (complexity) formData.append('complexity', complexity)
+    if (priority) formData.append('priority', priority)
 
     const response = await api.post('/extractions', formData, {
       headers: {
@@ -81,10 +83,28 @@ export const extractionApi = {
     return response.data
   },
 
-  list: async (page: number = 1, pageSize: number = 20): Promise<ExtractionListResponse> => {
-    const response = await api.get('/extractions', {
-      params: { page, page_size: pageSize },
-    })
+  list: async (
+    page: number = 1,
+    pageSize: number = 20,
+    status?: string,
+    search?: string
+  ): Promise<ExtractionListResponse> => {
+    const params: Record<string, string | number> = { page, page_size: pageSize }
+    if (status && status !== 'all') {
+      params.status = status
+    }
+    if (search) {
+      params.search = search
+    }
+    const response = await api.get('/extractions', { params })
+    return response.data
+  },
+
+  update: async (
+    id: number,
+    data: { input_filename?: string; columns_requested?: string[]; multiple_tables?: boolean }
+  ): Promise<Extraction> => {
+    const response = await api.patch(`/extractions/${id}`, data)
     return response.data
   },
 
