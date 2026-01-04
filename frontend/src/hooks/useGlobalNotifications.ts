@@ -9,7 +9,7 @@ import type { Extraction } from '../types'
  */
 export function useGlobalNotifications() {
   const addNotification = useNotificationStore((state) => state.addNotification)
-  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const pollingIntervalRef = useRef<number | null>(null)
   const processedExtractionsRef = useRef<Set<number>>(new Set())
 
   useEffect(() => {
@@ -74,11 +74,11 @@ export function useGlobalNotifications() {
 
     // Poll immediately, then every 5 seconds
     pollExtractions()
-    pollingIntervalRef.current = setInterval(pollExtractions, 5000)
+    pollingIntervalRef.current = window.setInterval(pollExtractions, 5000)
 
     return () => {
-      if (pollingIntervalRef.current) {
-        clearInterval(pollingIntervalRef.current)
+      if (pollingIntervalRef.current !== null) {
+        window.clearInterval(pollingIntervalRef.current)
       }
     }
   }, [addNotification])
