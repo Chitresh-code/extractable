@@ -34,6 +34,9 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({
     setLoading(true);
 
     try {
+      // Determine the filename to use
+      const extractionName = name.trim() || file.name;
+
       const extraction = await extractionApi.create(
         file,
         columns || undefined,
@@ -42,13 +45,20 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({
         priority,
       );
 
-      // Update extraction name if provided
-      if (name.trim()) {
-        await extractionApi.update(extraction.id, {
-          input_filename: name.trim(),
-        });
-        // Update the extraction object with the new name
-        extraction.input_filename = name.trim();
+      // Update extraction name if different from file name
+      // Try to update, but don't fail if it's already processing
+      if (extractionName !== file.name) {
+        try {
+          await extractionApi.update(extraction.id, {
+            input_filename: extractionName,
+          });
+          extraction.input_filename = extractionName;
+        } catch (updateError) {
+          // If update fails (e.g., already processing), log but don't fail
+          console.warn("Could not update extraction name:", updateError);
+          // Still use the name for the extraction object
+          extraction.input_filename = extractionName;
+        }
       }
 
       onSuccess(extraction);

@@ -323,9 +323,17 @@ async def update_extraction(
     if not extraction:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Extraction not found")
 
-    # Only allow updating metadata if extraction is not processing
+    # Allow updating name even when processing (for user convenience)
+    # Only block other updates if processing
     if extraction.status == ExtractionStatus.PROCESSING.value:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Cannot update extraction while it is processing")
+        # Allow updating input_filename even when processing
+        allowed_fields_when_processing = {"input_filename"}
+        update_fields = set(update_data.keys())
+        if not update_fields.issubset(allowed_fields_when_processing):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot update extraction metadata while it is processing. Only name can be updated."
+            )
 
     # Update fields if provided
     update_data = extraction_update.model_dump(exclude_unset=True)
