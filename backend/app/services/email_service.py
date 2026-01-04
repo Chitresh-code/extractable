@@ -5,15 +5,14 @@ Handles sending transactional emails like welcome emails and password reset emai
 
 import logging
 from typing import Optional
-from resend import Resend
+import resend
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-# Initialize Resend client
-resend_client = None
+# Initialize Resend API key
 if settings.resend_api_key:
-    resend_client = Resend(api_key=settings.resend_api_key)
+    resend.api_key = settings.resend_api_key
 else:
     logger.warning("RESEND_API_KEY not set. Email functionality will be disabled.")
 
@@ -32,8 +31,8 @@ async def send_welcome_email(
     Returns:
         True if email was sent successfully, False otherwise
     """
-    if not resend_client:
-        logger.warning("Resend client not initialized. Skipping welcome email.")
+    if not settings.resend_api_key:
+        logger.warning("Resend API key not set. Skipping welcome email.")
         return False
 
     try:
@@ -93,7 +92,7 @@ async def send_welcome_email(
             "html": html_content,
         }
 
-        response = resend_client.emails.send(params)
+        response = resend.Emails.send(params)
         logger.info(f"Welcome email sent to {email}: {response}")
         return True
 
@@ -117,8 +116,8 @@ async def send_password_reset_email(
     Returns:
         True if email was sent successfully, False otherwise
     """
-    if not resend_client:
-        logger.warning("Resend client not initialized. Skipping password reset email.")
+    if not settings.resend_api_key:
+        logger.warning("Resend API key not set. Skipping password reset email.")
         return False
 
     try:
@@ -180,7 +179,7 @@ async def send_password_reset_email(
             "html": html_content,
         }
 
-        response = resend_client.emails.send(params)
+        response = resend.Emails.send(params)
         logger.info(f"Password reset email sent to {email}")
         return True
 

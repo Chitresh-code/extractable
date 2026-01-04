@@ -6,7 +6,7 @@ Handles user registration, login, and token refresh.
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 from app.core.database import get_db
 from app.core.security import (
     verify_password,
@@ -184,7 +184,7 @@ async def forgot_password(forgot_password_data: ForgotPassword, db: Session = De
         # Generate reset token
         reset_token = generate_password_reset_token()
         user.password_reset_token = reset_token
-        user.password_reset_expires = datetime.utcnow() + timedelta(hours=1)  # Token expires in 1 hour
+        user.password_reset_expires = datetime.now(timezone.utc) + timedelta(hours=1)  # Token expires in 1 hour
         db.commit()
 
         # Send password reset email
@@ -222,7 +222,7 @@ async def reset_password(reset_password_data: ResetPassword, db: Session = Depen
         )
 
     # Check if token has expired
-    if user.password_reset_expires is None or user.password_reset_expires < datetime.utcnow():
+    if user.password_reset_expires is None or user.password_reset_expires < datetime.now(timezone.utc):
         # Clear expired token
         user.password_reset_token = None
         user.password_reset_expires = None
