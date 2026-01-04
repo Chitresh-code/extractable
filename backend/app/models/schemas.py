@@ -11,21 +11,24 @@ from app.models.enums import ExtractionStatus, InputType, OutputFormat
 # User Schemas
 class UserBase(BaseModel):
     """Base user schema."""
+
     email: EmailStr
 
 
 class UserCreate(UserBase):
     """Schema for user registration."""
+
     password: str
 
 
 class UserResponse(UserBase):
     """Schema for user response."""
+
     id: int
     is_active: bool
     is_verified: bool
     created_at: datetime
-    
+
     class Config:
         from_attributes = True
 
@@ -33,18 +36,21 @@ class UserResponse(UserBase):
 # Authentication Schemas
 class Token(BaseModel):
     """JWT token response schema."""
+
     access_token: str
     token_type: str = "bearer"
 
 
 class TokenData(BaseModel):
     """Token payload data."""
+
     user_id: Optional[int] = None
 
 
 # Extraction Schemas
 class ExtractionCreate(BaseModel):
     """Schema for creating extraction job."""
+
     columns: Optional[List[str]] = None
     multiple_tables: bool = False
     output_format: str = OutputFormat.JSON.value
@@ -53,6 +59,7 @@ class ExtractionCreate(BaseModel):
 
 class ExtractionResponse(BaseModel):
     """Schema for extraction response."""
+
     id: int
     user_id: int
     status: str
@@ -70,13 +77,14 @@ class ExtractionResponse(BaseModel):
     created_at: datetime
     updated_at: Optional[datetime]
     completed_at: Optional[datetime]
-    
+
     class Config:
         from_attributes = True
 
 
 class ExtractionUpdate(BaseModel):
     """Schema for updating extraction job."""
+
     input_filename: Optional[str] = None
     columns_requested: Optional[List[str]] = None
     multiple_tables: Optional[bool] = None
@@ -85,8 +93,8 @@ class ExtractionUpdate(BaseModel):
 
 class ExtractionListResponse(BaseModel):
     """Schema for paginated extraction list."""
+
     items: List[ExtractionResponse]
     total: int
     page: int
     page_size: int
-

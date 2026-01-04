@@ -29,11 +29,11 @@ def get_password_hash(password: str) -> str:
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     """
     Create a JWT access token.
-    
+
     Args:
         data: Dictionary containing token payload (typically user info)
         expires_delta: Optional expiration time delta
-        
+
     Returns:
         Encoded JWT token string
     """
@@ -42,7 +42,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(minutes=settings.access_token_expire_minutes)
-    
+
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt
@@ -51,10 +51,10 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 def decode_access_token(token: str) -> Optional[dict]:
     """
     Decode and verify a JWT access token.
-    
+
     Args:
         token: JWT token string
-        
+
     Returns:
         Decoded token payload if valid, None otherwise
     """
@@ -64,4 +64,3 @@ def decode_access_token(token: str) -> Optional[dict]:
     except JWTError as e:
         logger.warning(f"JWT decoding failed: {e}")
         return None
-

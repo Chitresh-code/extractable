@@ -9,10 +9,10 @@ import sys
 # Configure logging FIRST, before any other imports that might log
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s | %(levelname)s | %(name)s | %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
     stream=sys.stdout,
-    force=True  # Force reconfiguration if already configured
+    force=True,  # Force reconfiguration if already configured
 )
 
 from fastapi import FastAPI
@@ -22,9 +22,7 @@ from app.api.versioning import get_current_version, get_supported_versions
 
 # Create FastAPI app
 app = FastAPI(
-    title="Extractable API",
-    description="SaaS platform for extracting structured tables from PDFs and images",
-    version="1.0.0"
+    title="Extractable API", description="SaaS platform for extracting structured tables from PDFs and images", version="1.0.0"
 )
 
 # Setup CORS
@@ -43,8 +41,4 @@ async def health_check():
 @app.get("/api/versions")
 async def get_api_versions():
     """Get available API versions."""
-    return {
-        "current_version": get_current_version(),
-        "supported_versions": get_supported_versions()
-    }
-
+    return {"current_version": get_current_version(), "supported_versions": get_supported_versions()}

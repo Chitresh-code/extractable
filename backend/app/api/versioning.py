@@ -29,4 +29,3 @@ def is_version_supported(version: str) -> bool:
 def get_latest_version() -> str:
     """Get the latest API version."""
     return SUPPORTED_VERSIONS[-1] if SUPPORTED_VERSIONS else CURRENT_VERSION
-

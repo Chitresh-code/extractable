@@ -32,8 +32,9 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess }) => 
         complexity
       )
       onSuccess(extraction)
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to create extraction')
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { detail?: string } } }
+      setError(error.response?.data?.detail || 'Failed to create extraction')
     } finally {
       setLoading(false)
     }

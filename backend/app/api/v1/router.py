@@ -13,4 +13,3 @@ router = APIRouter(prefix="/api/v1", tags=["v1"])
 router.include_router(auth.router, prefix="/auth", tags=["authentication"])
 router.include_router(extraction.router, prefix="/extractions", tags=["extractions"])
 router.include_router(users.router, prefix="/users", tags=["users"])
-
