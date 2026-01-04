@@ -23,7 +23,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
-import { Mail, Lock, User, Calendar, CheckCircle2, XCircle } from "lucide-react";
+import { Mail, Lock, User, Calendar, CheckCircle2, XCircle, HelpCircle, MessageSquare, Shield, CreditCard, Briefcase } from "lucide-react";
 
 export function AccountPage() {
   const { user } = useAuth();
@@ -425,6 +425,99 @@ export function AccountPage() {
                 </Button>
               </div>
             </form>
+          </CardContent>
+        </Card>
+
+        {/* Support & Contact Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <HelpCircle className="h-5 w-5" />
+              Support & Contact
+            </CardTitle>
+            <CardDescription>
+              Need help? Contact us through the appropriate channel
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <MessageSquare className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">General Support</div>
+                    <a
+                      href="mailto:support@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      support@extractable.in
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Mail className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">General Inquiries</div>
+                    <a
+                      href="mailto:hello@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      hello@extractable.in
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <MessageSquare className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">Feedback</div>
+                    <a
+                      href="mailto:feedback@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      feedback@extractable.in
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <CreditCard className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">Billing</div>
+                    <a
+                      href="mailto:billing@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      billing@extractable.in
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">Security</div>
+                    <a
+                      href="mailto:security@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      security@extractable.in
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Briefcase className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">Careers</div>
+                    <a
+                      href="mailto:careers@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      careers@extractable.in
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

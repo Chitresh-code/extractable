@@ -86,11 +86,15 @@ async def send_welcome_email(
         """
 
         params = {
-            "from": settings.resend_from_email,
+            "from": settings.resend_founder_email or settings.resend_default_from_email,
             "to": [recipient],
             "subject": subject,
             "html": html_content,
         }
+        
+        # Add reply-to if configured
+        if settings.resend_reply_to:
+            params["reply_to"] = [settings.resend_reply_to]
 
         response = resend.Emails.send(params)
         logger.info(f"Welcome email sent to {email}: {response}")
@@ -173,11 +177,15 @@ async def send_password_reset_email(
         """
 
         params = {
-            "from": settings.resend_from_email,
+            "from": settings.resend_default_from_email,
             "to": [recipient],
             "subject": subject,
             "html": html_content,
         }
+        
+        # Add reply-to if configured
+        if settings.resend_reply_to:
+            params["reply_to"] = [settings.resend_reply_to]
 
         response = resend.Emails.send(params)
         logger.info(f"Password reset email sent to {email}")
