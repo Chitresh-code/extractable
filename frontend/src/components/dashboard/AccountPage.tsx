@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { userApi, authApi } from "../../services/api";
+import { userApi } from "../../services/api";
 import { toast } from "sonner";
 import {
   Breadcrumb,
