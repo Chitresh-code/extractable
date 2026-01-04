@@ -24,61 +24,81 @@ export const Login: React.FC = () => {
         <div className="absolute inset-0 bg-linear-to-br from-blue-600 via-indigo-600 to-purple-600 opacity-90" />
         <div className="absolute inset-0 flex items-center justify-center p-12">
           <div className="text-white space-y-6 max-w-md">
-            <h2 className="text-4xl font-bold">Extract Tables from Documents</h2>
+            <h2 className="text-4xl font-bold">Welcome Back</h2>
             <p className="text-lg text-blue-100">
-              Transform your PDFs and images into structured data with our
-              AI-powered extraction pipeline.
+              Continue extracting tables from your documents. Access your extraction history and manage your projects.
             </p>
-            <ul className="space-y-3 text-blue-50">
-              <li className="flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                Multi-pass validation for accuracy
-              </li>
-              <li className="flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                Export to JSON, CSV, or Excel
-              </li>
-              <li className="flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                Simple and user-friendly interface
-              </li>
-            </ul>
+            <div className="space-y-4 pt-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-1 flex-shrink-0">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Access Your History</h3>
+                  <p className="text-sm text-blue-50">
+                    View and download all your previous extractions in one place.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="mt-1 flex-shrink-0">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Quick Processing</h3>
+                  <p className="text-sm text-blue-50">
+                    Your files are processed with our AI-powered pipeline for accurate results.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="mt-1 flex-shrink-0">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Secure & Private</h3>
+                  <p className="text-sm text-blue-50">
+                    Your data is processed securely and never stored permanently.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
