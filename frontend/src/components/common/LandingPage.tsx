@@ -55,10 +55,10 @@ export const LandingPage: React.FC = () => {
           {/* Main Heading */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 leading-tight">
             <span className="block bg-linear-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent">
-              Extract Tables from
-            </span>
-            <span className="block bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent animate-gradient">
-              PDFs & Images
+              Extract Tables from{' '}
+              <span className="bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent animate-gradient">
+                PDFs & Images
+              </span>
             </span>
             <span className="block bg-linear-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent">
               in Seconds
