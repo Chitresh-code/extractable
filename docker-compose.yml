@@ -1,0 +1,69 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: extractable_postgres
+    env_file:
+      - ./backend/.env
+    # All variables (POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB) are loaded from backend/.env via env_file
+    # No need to duplicate in environment section
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-extractable_user} -d ${POSTGRES_DB:-extractable_db}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - extractable_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: extractable_backend
+    env_file:
+      - ./backend/.env
+    environment:
+      # Override POSTGRES_HOST to use Docker service name for networking
+      # All other variables (including GEMINI_API_KEY, DATABASE_URL, etc.) are loaded from backend/.env via env_file
+      POSTGRES_HOST: postgres
+    ports:
+      - "8000:8000"
+    # No volumes needed - all data stored in PostgreSQL
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - extractable_network
+    # run.sh handles migrations and startup (production-ready)
+    # For development with auto-reload, uncomment the command below and comment out CMD in Dockerfile
+    # command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000/api/v1}
+    container_name: extractable_frontend
+    env_file:
+      - ./frontend/.env.local
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - extractable_network
+
+volumes:
+  postgres_data:
+
+networks:
+  extractable_network:
+    driver: bridge
