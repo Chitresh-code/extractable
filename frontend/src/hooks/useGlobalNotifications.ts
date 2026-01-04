@@ -99,7 +99,7 @@ export function useGlobalNotifications() {
 
         // Clean up tracked extractions that are no longer in the list
         const allIds = new Set(response.items.map((e: Extraction) => e.id))
-        trackedExtractionsRef.current.forEach((id) => {
+        trackedExtractionsRef.current.forEach((_status, id) => {
           if (!allIds.has(id)) {
             trackedExtractionsRef.current.delete(id)
             processedExtractionsRef.current.delete(id)
