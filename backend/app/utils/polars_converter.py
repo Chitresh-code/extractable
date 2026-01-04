@@ -80,15 +80,18 @@ def convert_to_excel(table_data: Dict[str, Any]) -> bytes:
     """
     df = convert_to_dataframe(table_data)
 
-    # Use polars write_excel if available, otherwise use openpyxl
+    # Use polars write_excel with xlsxwriter
     try:
         excel_bytes = BytesIO()
-        df.write_excel(excel_bytes)
+        df.write_excel(excel_bytes, engine="xlsxwriter")
         excel_bytes.seek(0)
         return excel_bytes.read()
-    except Exception:
-        # Fallback: convert to CSV and suggest using openpyxl
-        raise NotImplementedError("Excel export requires polars-xlsx or openpyxl. " "Install with: pip install polars-xlsx")
+    except ImportError as e:
+        raise ImportError(
+            "Excel export requires xlsxwriter. Install with: pip install xlsxwriter"
+        ) from e
+    except Exception as e:
+        raise RuntimeError(f"Failed to convert to Excel: {str(e)}") from e
 
 
 def convert_table_data(table_data: Dict[str, Any], output_format: str) -> bytes:

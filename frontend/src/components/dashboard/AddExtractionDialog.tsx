@@ -21,6 +21,7 @@ export function AddExtractionDialog({
 }: AddExtractionDialogProps) {
   const handleSuccess = (extraction: Extraction) => {
     onSuccess(extraction);
+    onOpenChange(false); // Close dialog on success
   };
 
   return (
