@@ -19,7 +19,7 @@ engine = create_engine(
     pool_pre_ping=True,  # Verify connections before using
     pool_size=10,
     max_overflow=20,
-    echo=False  # Set to True for SQL query logging
+    echo=False,  # Set to True for SQL query logging
 )
 
 # Session factory
@@ -44,4 +44,3 @@ def get_db():
 def init_db():
     """Initialize database tables."""
     Base.metadata.create_all(bind=engine)
-
