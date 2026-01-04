@@ -83,6 +83,13 @@ class Settings(BaseSettings):
     # API Version
     api_version: str = "v1"
 
+    # Email Configuration (Resend)
+    resend_api_key: str = ""
+    resend_default_from_email: str = "Extractable <no-reply@extractable.in>"  # Default from email for system emails
+    resend_founder_email: str = "Chitresh Gyanani <chitresh.gyanani@extractable.in>"  # Founder email for onboarding
+    resend_reply_to: str = "support@extractable.in"  # Reply-to address for emails
+    frontend_url: str = "http://localhost:5173"  # For password reset links
+
     model_config = SettingsConfigDict(
         env_file=".env",  # Try to read from .env file if it exists
         env_file_encoding="utf-8",

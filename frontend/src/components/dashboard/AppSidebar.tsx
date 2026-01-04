@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Home, FileText, GalleryVerticalEnd } from "lucide-react";
+import { Home, FileText, GalleryVerticalEnd, UserCircle } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { NavMain } from "../nav-main";
 import { NavUser } from "../nav-user";
@@ -29,6 +29,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       title: "Extractions",
       url: "/dashboard/extractions",
       icon: FileText,
+    },
+    {
+      title: "Account",
+      url: "/dashboard/account",
+      icon: UserCircle,
     },
   ];
 

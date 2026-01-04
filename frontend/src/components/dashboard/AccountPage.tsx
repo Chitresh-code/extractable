@@ -23,12 +23,18 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
-import { Mail, Lock, User, Calendar, CheckCircle2, XCircle } from "lucide-react";
+import { Mail, Lock, User, Calendar, CheckCircle2, XCircle, HelpCircle, MessageSquare, Shield, CreditCard, Briefcase } from "lucide-react";
 
 export function AccountPage() {
   const { user } = useAuth();
   const [emailLoading, setEmailLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false);
+
+  // Profile form state
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [profileError, setProfileError] = useState("");
 
   // Email form state
   const [email, setEmail] = useState("");
@@ -44,8 +50,35 @@ export function AccountPage() {
   useEffect(() => {
     if (user) {
       setEmail(user.email);
+      setFirstName(user.first_name || "");
+      setLastName(user.last_name || "");
     }
   }, [user]);
+
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setProfileError("");
+
+    setProfileLoading(true);
+    try {
+      await userApi.updateProfile({
+        first_name: firstName.trim() || undefined,
+        last_name: lastName.trim() || undefined,
+      });
+      toast.success("Profile updated successfully");
+      setProfileError("");
+      // Reload page to refresh user context
+      window.location.reload();
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { detail?: string } } };
+      setProfileError(err.response?.data?.detail || "Failed to update profile");
+      toast.error("Failed to update profile", {
+        description: err.response?.data?.detail || "An error occurred",
+      });
+    } finally {
+      setProfileLoading(false);
+    }
+  };
 
   const handleEmailUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -150,6 +183,51 @@ export function AccountPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
+          {/* Update Name Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Update Name
+              </CardTitle>
+              <CardDescription>
+                Update your first and last name
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleProfileUpdate} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="first-name">First Name</Label>
+                  <Input
+                    id="first-name"
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="Enter first name"
+                    disabled={profileLoading}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="last-name">Last Name</Label>
+                  <Input
+                    id="last-name"
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Enter last name"
+                    disabled={profileLoading}
+                  />
+                </div>
+                {profileError && (
+                  <p className="text-sm text-destructive">{profileError}</p>
+                )}
+                <Button type="submit" disabled={profileLoading}>
+                  {profileLoading ? "Updating..." : "Update Name"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
           {/* Profile Information Card */}
           <Card>
             <CardHeader>
@@ -162,6 +240,21 @@ export function AccountPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              {(user.first_name || user.last_name) && (
+                <>
+                  <div className="space-y-2">
+                    <Label className="text-xs text-muted-foreground">Name</Label>
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium">
+                        {[user.first_name, user.last_name].filter(Boolean).join(" ") || "Not set"}
+                      </span>
+                    </div>
+                  </div>
+                  <Separator />
+                </>
+              )}
+
               <div className="space-y-2">
                 <Label className="text-xs text-muted-foreground">Email</Label>
                 <div className="flex items-center gap-2">
@@ -332,6 +425,99 @@ export function AccountPage() {
                 </Button>
               </div>
             </form>
+          </CardContent>
+        </Card>
+
+        {/* Support & Contact Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <HelpCircle className="h-5 w-5" />
+              Support & Contact
+            </CardTitle>
+            <CardDescription>
+              Need help? Contact us through the appropriate channel
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <MessageSquare className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">General Support</div>
+                    <a
+                      href="mailto:support@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      support@extractable.in
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Mail className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">General Inquiries</div>
+                    <a
+                      href="mailto:hello@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      hello@extractable.in
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <MessageSquare className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">Feedback</div>
+                    <a
+                      href="mailto:feedback@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      feedback@extractable.in
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <CreditCard className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">Billing</div>
+                    <a
+                      href="mailto:billing@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      billing@extractable.in
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">Security</div>
+                    <a
+                      href="mailto:security@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      security@extractable.in
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Briefcase className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-medium text-sm">Careers</div>
+                    <a
+                      href="mailto:careers@extractable.in"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      careers@extractable.in
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

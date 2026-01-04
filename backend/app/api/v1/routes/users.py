@@ -61,6 +61,14 @@ async def update_user_profile(
             )
         current_user.email = user_update.email
 
+    # Update first_name if provided
+    if user_update.first_name is not None:
+        current_user.first_name = user_update.first_name
+
+    # Update last_name if provided
+    if user_update.last_name is not None:
+        current_user.last_name = user_update.last_name
+
     db.commit()
     db.refresh(current_user)
     return current_user

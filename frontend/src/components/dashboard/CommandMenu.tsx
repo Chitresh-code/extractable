@@ -7,7 +7,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { Home, FileText } from "lucide-react";
+import { Home, FileText, UserCircle } from "lucide-react";
 
 export function CommandMenu() {
   const navigate = useNavigate();
@@ -22,6 +22,11 @@ export function CommandMenu() {
       title: "Extractions",
       icon: FileText,
       action: () => navigate("/dashboard/extractions"),
+    },
+    {
+      title: "Account",
+      icon: UserCircle,
+      action: () => navigate("/dashboard/account"),
     },
   ];
 

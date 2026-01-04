@@ -303,10 +303,81 @@ export const LandingPage: React.FC = () => {
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white py-12 mt-20">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Extractable
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="text-xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+                Extractable
+              </div>
+              <p className="text-sm text-slate-600">
+                Extract structured tables from PDFs and images using advanced AI technology.
+              </p>
             </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-4">Contact</h3>
+              <div className="space-y-2 text-sm text-slate-600">
+                <div>
+                  <span className="font-medium">Support:</span>{" "}
+                  <a
+                    href="mailto:support@extractable.in"
+                    className="hover:text-blue-600 transition-colors"
+                  >
+                    support@extractable.in
+                  </a>
+                </div>
+                <div>
+                  <span className="font-medium">General:</span>{" "}
+                  <a
+                    href="mailto:hello@extractable.in"
+                    className="hover:text-blue-600 transition-colors"
+                  >
+                    hello@extractable.in
+                  </a>
+                </div>
+                <div>
+                  <span className="font-medium">Feedback:</span>{" "}
+                  <a
+                    href="mailto:feedback@extractable.in"
+                    className="hover:text-blue-600 transition-colors"
+                  >
+                    feedback@extractable.in
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-4">Other</h3>
+              <div className="space-y-2 text-sm text-slate-600">
+                <div>
+                  <span className="font-medium">Billing:</span>{" "}
+                  <a
+                    href="mailto:billing@extractable.in"
+                    className="hover:text-blue-600 transition-colors"
+                  >
+                    billing@extractable.in
+                  </a>
+                </div>
+                <div>
+                  <span className="font-medium">Security:</span>{" "}
+                  <a
+                    href="mailto:security@extractable.in"
+                    className="hover:text-blue-600 transition-colors"
+                  >
+                    security@extractable.in
+                  </a>
+                </div>
+                <div>
+                  <span className="font-medium">Careers:</span>{" "}
+                  <a
+                    href="mailto:careers@extractable.in"
+                    className="hover:text-blue-600 transition-colors"
+                  >
+                    careers@extractable.in
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-slate-200">
             <div className="flex items-center gap-6 text-sm text-slate-600">
               <a
                 href="#"
@@ -319,12 +390,6 @@ export const LandingPage: React.FC = () => {
                 className="hover:text-blue-600 transition-colors duration-200"
               >
                 Terms
-              </a>
-              <a
-                href="#"
-                className="hover:text-blue-600 transition-colors duration-200"
-              >
-                Support
               </a>
             </div>
             <div className="text-sm text-slate-600">

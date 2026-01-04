@@ -25,6 +25,8 @@ class UserResponse(UserBase):
     """Schema for user response."""
 
     id: int
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     is_active: bool
     is_verified: bool
     created_at: datetime
@@ -37,12 +39,27 @@ class UserUpdate(BaseModel):
     """Schema for updating user profile."""
 
     email: Optional[EmailStr] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
 
 
 class PasswordChange(BaseModel):
     """Schema for changing password."""
 
     current_password: str
+    new_password: str
+
+
+class ForgotPassword(BaseModel):
+    """Schema for forgot password request."""
+
+    email: EmailStr
+
+
+class ResetPassword(BaseModel):
+    """Schema for resetting password with token."""
+
+    token: str
     new_password: str
 
 

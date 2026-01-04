@@ -54,6 +54,16 @@ export const authApi = {
     const response = await api.get("/auth/me");
     return response.data;
   },
+
+  forgotPassword: async (email: string): Promise<{ message: string }> => {
+    const response = await api.post("/auth/forgot-password", { email });
+    return response.data;
+  },
+
+  resetPassword: async (token: string, newPassword: string): Promise<{ message: string }> => {
+    const response = await api.post("/auth/reset-password", { token, new_password: newPassword });
+    return response.data;
+  },
 };
 
 // Extraction endpoints
@@ -142,7 +152,11 @@ export const userApi = {
     return response.data;
   },
 
-  updateProfile: async (data: { email?: string }): Promise<User> => {
+  updateProfile: async (data: {
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+  }): Promise<User> => {
     const response = await api.patch("/users/me", data);
     return response.data;
   },
