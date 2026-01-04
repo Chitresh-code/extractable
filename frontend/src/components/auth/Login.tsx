@@ -1,6 +1,6 @@
-import { GalleryVerticalEnd } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { LoginForm } from './LoginForm'
+import { GalleryVerticalEnd } from "lucide-react";
+import { Link } from "react-router-dom";
+import { LoginForm } from "./LoginForm";
 
 export const Login: React.FC = () => {
   return (
@@ -26,7 +26,8 @@ export const Login: React.FC = () => {
           <div className="text-white space-y-6 max-w-md">
             <h2 className="text-4xl font-bold">Welcome Back</h2>
             <p className="text-lg text-blue-100">
-              Continue extracting tables from your documents. Access your extraction history and manage your projects.
+              Continue extracting tables from your documents. Access your
+              extraction history and manage your projects.
             </p>
             <div className="space-y-4 pt-4">
               <div className="flex items-start gap-3">
@@ -48,7 +49,8 @@ export const Login: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-1">Access Your History</h3>
                   <p className="text-sm text-blue-50">
-                    View and download all your previous extractions in one place.
+                    View and download all your previous extractions in one
+                    place.
                   </p>
                 </div>
               </div>
@@ -71,7 +73,8 @@ export const Login: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-1">Quick Processing</h3>
                   <p className="text-sm text-blue-50">
-                    Your files are processed with our AI-powered pipeline for accurate results.
+                    Your files are processed with our AI-powered pipeline for
+                    accurate results.
                   </p>
                 </div>
               </div>
@@ -94,7 +97,8 @@ export const Login: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-1">Secure & Private</h3>
                   <p className="text-sm text-blue-50">
-                    Your data is processed securely and never stored permanently.
+                    Your data is processed securely and never stored
+                    permanently.
                   </p>
                 </div>
               </div>
@@ -103,5 +107,5 @@ export const Login: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,14 +1,14 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext'
-import { LandingPage } from './components/common/LandingPage'
-import { ProtectedRoute } from './components/common/ProtectedRoute'
-import { Login } from './components/auth/Login'
-import { Register } from './components/auth/Register'
-import { DashboardLayout } from './components/dashboard/DashboardLayout'
-import { HomePage } from './components/dashboard/HomePage'
-import { ExtractionsPage } from './components/dashboard/ExtractionsPage'
-import { ExtractionDetailPage } from './components/dashboard/ExtractionDetailPage'
-import { Toaster } from './components/ui/sonner'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { LandingPage } from "./components/common/LandingPage";
+import { ProtectedRoute } from "./components/common/ProtectedRoute";
+import { Login } from "./components/auth/Login";
+import { Register } from "./components/auth/Register";
+import { DashboardLayout } from "./components/dashboard/DashboardLayout";
+import { HomePage } from "./components/dashboard/HomePage";
+import { ExtractionsPage } from "./components/dashboard/ExtractionsPage";
+import { ExtractionDetailPage } from "./components/dashboard/ExtractionDetailPage";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
   return (
@@ -47,17 +47,13 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/"
-            element={<LandingPage />}
-          />
+          <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Toaster />
       </BrowserRouter>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
-
+export default App;

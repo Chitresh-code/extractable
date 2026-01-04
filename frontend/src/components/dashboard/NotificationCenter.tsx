@@ -1,5 +1,5 @@
-import { Bell } from 'lucide-react'
-import { Button } from '../ui/button'
+import { Bell } from "lucide-react";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,13 +7,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu'
-import { Badge } from '../ui/badge'
-import { ScrollArea } from '../ui/scroll-area'
-import { useNotificationStore } from '../../store/notificationStore'
+} from "../ui/dropdown-menu";
+import { Badge } from "../ui/badge";
+import { ScrollArea } from "../ui/scroll-area";
+import { useNotificationStore } from "../../store/notificationStore";
 
 export function NotificationCenter() {
-  const { notifications, unreadCount, markAsRead, clearAll } = useNotificationStore()
+  const { notifications, unreadCount, markAsRead, clearAll } =
+    useNotificationStore();
 
   return (
     <DropdownMenu>
@@ -25,12 +26,15 @@ export function NotificationCenter() {
               variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
             >
-              {unreadCount > 9 ? '9+' : unreadCount}
+              {unreadCount > 9 ? "9+" : unreadCount}
             </Badge>
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80 bg-white border-gray-300">
+      <DropdownMenuContent
+        align="end"
+        className="w-80 bg-white border-gray-300"
+      >
         <div className="flex items-center justify-between px-2 py-1.5">
           <DropdownMenuLabel>Notifications</DropdownMenuLabel>
           {notifications.length > 0 && (
@@ -58,7 +62,9 @@ export function NotificationCenter() {
                 onClick={() => markAsRead(notification.id)}
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="font-medium text-sm">{notification.title}</span>
+                  <span className="font-medium text-sm">
+                    {notification.title}
+                  </span>
                   {!notification.read && (
                     <div className="h-2 w-2 rounded-full bg-primary" />
                   )}
@@ -75,6 +81,5 @@ export function NotificationCenter() {
         </ScrollArea>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
-

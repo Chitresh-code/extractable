@@ -1,34 +1,34 @@
-import * as React from 'react'
-import { SidebarProvider, SidebarInset, SidebarTrigger } from '../ui/sidebar'
-import { AppSidebar } from './AppSidebar'
-import { Separator } from '../ui/separator'
-import { Search } from 'lucide-react'
-import { Button } from '../ui/button'
-import { useAuth } from '../../context/AuthContext'
-import { CommandDialog } from '../ui/command'
-import { CommandMenu } from './CommandMenu'
-import { NotificationCenter } from './NotificationCenter'
-import { UserMenu } from './UserMenu'
+import * as React from "react";
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "../ui/sidebar";
+import { AppSidebar } from "./AppSidebar";
+import { Separator } from "../ui/separator";
+import { Search } from "lucide-react";
+import { Button } from "../ui/button";
+import { useAuth } from "../../context/AuthContext";
+import { CommandDialog } from "../ui/command";
+import { CommandMenu } from "./CommandMenu";
+import { NotificationCenter } from "./NotificationCenter";
+import { UserMenu } from "./UserMenu";
 
 interface DashboardLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { user } = useAuth()
-  const [commandOpen, setCommandOpen] = React.useState(false)
+  const { user } = useAuth();
+  const [commandOpen, setCommandOpen] = React.useState(false);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setCommandOpen((open) => !open)
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setCommandOpen((open) => !open);
       }
-    }
+    };
 
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
-  }, [])
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
 
   return (
     <SidebarProvider>
@@ -56,9 +56,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               {user && (
                 <UserMenu
                   user={{
-                    name: user.email.split('@')[0],
+                    name: user.email.split("@")[0],
                     email: user.email,
-                    avatar: '',
+                    avatar: "",
                   }}
                 />
               )}
@@ -73,6 +73,5 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <CommandMenu />
       </CommandDialog>
     </SidebarProvider>
-  )
+  );
 }
-

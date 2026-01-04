@@ -1,32 +1,37 @@
-import { useState } from 'react'
-import { extractionApi } from '../../services/api'
-import type { Extraction } from '../../types'
-import { Button } from '../ui/button'
+import { useState } from "react";
+import { extractionApi } from "../../services/api";
+import type { Extraction } from "../../types";
+import { Button } from "../ui/button";
 
 interface ExtractionFormProps {
-  onSuccess: (extraction: Extraction) => void
-  onCancel?: () => void
+  onSuccess: (extraction: Extraction) => void;
+  onCancel?: () => void;
 }
 
-export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess, onCancel }) => {
-  const [file, setFile] = useState<File | null>(null)
-  const [name, setName] = useState('')
-  const [columns, setColumns] = useState('')
-  const [multipleTables, setMultipleTables] = useState(false)
-  const [complexity, setComplexity] = useState<'simple' | 'regular' | 'complex'>('regular')
-  const [priority, setPriority] = useState<'high' | 'medium' | 'low'>('medium')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+export const ExtractionForm: React.FC<ExtractionFormProps> = ({
+  onSuccess,
+  onCancel,
+}) => {
+  const [file, setFile] = useState<File | null>(null);
+  const [name, setName] = useState("");
+  const [columns, setColumns] = useState("");
+  const [multipleTables, setMultipleTables] = useState(false);
+  const [complexity, setComplexity] = useState<
+    "simple" | "regular" | "complex"
+  >("regular");
+  const [priority, setPriority] = useState<"high" | "medium" | "low">("medium");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!file) {
-      setError('Please select a file')
-      return
+      setError("Please select a file");
+      return;
     }
 
-    setError('')
-    setLoading(true)
+    setError("");
+    setLoading(true);
 
     try {
       const extraction = await extractionApi.create(
@@ -34,26 +39,26 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess, onCan
         columns || undefined,
         multipleTables,
         complexity,
-        priority
-      )
-      
+        priority,
+      );
+
       // Update extraction name if provided
       if (name.trim()) {
         await extractionApi.update(extraction.id, {
           input_filename: name.trim(),
-        })
+        });
         // Update the extraction object with the new name
-        extraction.input_filename = name.trim()
+        extraction.input_filename = name.trim();
       }
-      
-      onSuccess(extraction)
+
+      onSuccess(extraction);
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { detail?: string } } }
-      setError(error.response?.data?.detail || 'Failed to create extraction')
+      const error = err as { response?: { data?: { detail?: string } } };
+      setError(error.response?.data?.detail || "Failed to create extraction");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="bg-card p-6 rounded-lg border">
@@ -73,11 +78,11 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess, onCan
             type="file"
             accept=".pdf,.png,.jpg,.jpeg"
             onChange={(e) => {
-              const selectedFile = e.target.files?.[0] || null
-              setFile(selectedFile)
+              const selectedFile = e.target.files?.[0] || null;
+              setFile(selectedFile);
               // Auto-fill name with filename if name is empty
               if (selectedFile && !name.trim()) {
-                setName(selectedFile.name)
+                setName(selectedFile.name);
               }
             }}
             required
@@ -97,7 +102,9 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess, onCan
             className="w-full px-3 py-2 border rounded-md"
           />
           <p className="text-xs text-muted-foreground mt-1">
-            {file ? `Default: ${file.name}` : 'Enter a custom name or leave blank to use file name'}
+            {file
+              ? `Default: ${file.name}`
+              : "Enter a custom name or leave blank to use file name"}
           </p>
         </div>
         <div>
@@ -126,17 +133,24 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess, onCan
           </label>
         </div>
         <div>
-          <label htmlFor="complexity" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="complexity"
+            className="block text-sm font-medium mb-2"
+          >
             Pipeline Complexity
           </label>
           <select
             id="complexity"
             value={complexity}
-            onChange={(e) => setComplexity(e.target.value as 'simple' | 'regular' | 'complex')}
+            onChange={(e) =>
+              setComplexity(e.target.value as "simple" | "regular" | "complex")
+            }
             className="w-full px-3 py-2 border rounded-md"
           >
             <option value="simple">Simple - Fast, basic extraction</option>
-            <option value="regular">Regular - Balanced speed and accuracy</option>
+            <option value="regular">
+              Regular - Balanced speed and accuracy
+            </option>
             <option value="complex">Complex - Highest accuracy, slower</option>
           </select>
         </div>
@@ -147,7 +161,9 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess, onCan
           <select
             id="priority"
             value={priority}
-            onChange={(e) => setPriority(e.target.value as 'high' | 'medium' | 'low')}
+            onChange={(e) =>
+              setPriority(e.target.value as "high" | "medium" | "low")
+            }
             className="w-full px-3 py-2 border rounded-md"
           >
             <option value="high">High - Process next (jumps queue)</option>
@@ -167,16 +183,11 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess, onCan
               Cancel
             </Button>
           )}
-          <Button
-            type="submit"
-            disabled={loading || !file}
-            className="flex-1"
-          >
-            {loading ? 'Processing...' : 'Extract Tables'}
+          <Button type="submit" disabled={loading || !file} className="flex-1">
+            {loading ? "Processing..." : "Extract Tables"}
           </Button>
         </div>
       </form>
     </div>
-  )
-}
-
+  );
+};

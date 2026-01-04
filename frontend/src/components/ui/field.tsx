@@ -1,21 +1,21 @@
-import * as React from "react"
-import { cn } from "../../lib/utils"
+import * as React from "react";
+import { cn } from "../../lib/utils";
 
 const FieldGroup = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("flex flex-col gap-6", className)} {...props} />
-))
-FieldGroup.displayName = "FieldGroup"
+));
+FieldGroup.displayName = "FieldGroup";
 
 const Field = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("flex flex-col gap-2", className)} {...props} />
-))
-Field.displayName = "Field"
+));
+Field.displayName = "Field";
 
 const FieldLabel = React.forwardRef<
   HTMLLabelElement,
@@ -25,12 +25,12 @@ const FieldLabel = React.forwardRef<
     ref={ref}
     className={cn(
       "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-      className
+      className,
     )}
     {...props}
   />
-))
-FieldLabel.displayName = "FieldLabel"
+));
+FieldLabel.displayName = "FieldLabel";
 
 const FieldDescription = React.forwardRef<
   HTMLParagraphElement,
@@ -41,8 +41,8 @@ const FieldDescription = React.forwardRef<
     className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
-))
-FieldDescription.displayName = "FieldDescription"
+));
+FieldDescription.displayName = "FieldDescription";
 
 const FieldSeparator = React.forwardRef<
   HTMLDivElement,
@@ -52,7 +52,7 @@ const FieldSeparator = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex items-center gap-4 text-xs text-muted-foreground",
-      className
+      className,
     )}
     {...props}
   >
@@ -60,8 +60,7 @@ const FieldSeparator = React.forwardRef<
     {children && <span>{children}</span>}
     <div className="flex-1 border-t" />
   </div>
-))
-FieldSeparator.displayName = "FieldSeparator"
+));
+FieldSeparator.displayName = "FieldSeparator";
 
-export { Field, FieldGroup, FieldLabel, FieldDescription, FieldSeparator }
-
+export { Field, FieldGroup, FieldLabel, FieldDescription, FieldSeparator };

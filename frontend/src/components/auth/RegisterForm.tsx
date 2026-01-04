@@ -1,49 +1,49 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff } from 'lucide-react'
-import { cn } from '../../lib/utils'
-import { Button } from '../ui/button'
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/button";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from '../ui/field'
-import { Input } from '../ui/input'
-import { useAuth } from '../../context/AuthContext'
+} from "../ui/field";
+import { Input } from "../ui/input";
+import { useAuth } from "../../context/AuthContext";
 
 export function RegisterForm({
   className,
   ...props
-}: React.ComponentProps<'form'>) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const { register } = useAuth()
-  const navigate = useNavigate()
+}: React.ComponentProps<"form">) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
-      await register(email, password)
-      navigate('/dashboard')
+      await register(email, password);
+      navigate("/dashboard");
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { detail?: string } } }
-      setError(error.response?.data?.detail || 'Registration failed')
+      const error = err as { response?: { data?: { detail?: string } } };
+      setError(error.response?.data?.detail || "Registration failed");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <form
-      className={cn('flex flex-col gap-6', className)}
+      className={cn("flex flex-col gap-6", className)}
       onSubmit={handleSubmit}
       {...props}
     >
@@ -75,7 +75,7 @@ export function RegisterForm({
           <div className="relative">
             <Input
               id="password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -86,7 +86,7 @@ export function RegisterForm({
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -100,8 +100,12 @@ export function RegisterForm({
           </p>
         </Field>
         <Field>
-          <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-            {loading ? 'Creating account...' : 'Create Account'}
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            {loading ? "Creating account..." : "Create Account"}
           </Button>
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
@@ -147,7 +151,7 @@ export function RegisterForm({
             </Button>
           </div>
           <FieldDescription className="text-center">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link to="/login" className="underline underline-offset-4">
               Sign in
             </Link>
@@ -155,6 +159,5 @@ export function RegisterForm({
         </Field>
       </FieldGroup>
     </form>
-  )
+  );
 }
-

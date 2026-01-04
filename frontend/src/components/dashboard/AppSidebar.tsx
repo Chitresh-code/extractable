@@ -1,8 +1,8 @@
-import * as React from 'react'
-import { Home, FileText, GalleryVerticalEnd } from 'lucide-react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { NavMain } from '../nav-main'
-import { NavUser } from '../nav-user'
+import * as React from "react";
+import { Home, FileText, GalleryVerticalEnd } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { NavMain } from "../nav-main";
+import { NavUser } from "../nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -11,31 +11,31 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '../ui/sidebar'
-import { useAuth } from '../../context/AuthContext'
+} from "../ui/sidebar";
+import { useAuth } from "../../context/AuthContext";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user, logout } = useAuth()
-  const location = useLocation()
-  const navigate = useNavigate()
+  const { user, logout } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const navItems = [
     {
-      title: 'Home',
-      url: '/dashboard',
+      title: "Home",
+      url: "/dashboard",
       icon: Home,
     },
     {
-      title: 'Extractions',
-      url: '/dashboard/extractions',
+      title: "Extractions",
+      url: "/dashboard/extractions",
       icon: FileText,
     },
-  ]
+  ];
 
   const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
+    logout();
+    navigate("/login");
+  };
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -56,16 +56,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           items={navItems.map((item) => {
             // For Home, only match exact path or if it's the base dashboard
             // For Extractions, match the path or any sub-path
-            let isActive = false
-            if (item.url === '/dashboard') {
-              isActive = location.pathname === '/dashboard'
+            let isActive = false;
+            if (item.url === "/dashboard") {
+              isActive = location.pathname === "/dashboard";
             } else {
-              isActive = location.pathname === item.url || location.pathname.startsWith(item.url + '/')
+              isActive =
+                location.pathname === item.url ||
+                location.pathname.startsWith(item.url + "/");
             }
             return {
               ...item,
               isActive,
-            }
+            };
           })}
         />
       </SidebarContent>
@@ -73,15 +75,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {user && (
           <NavUser
             user={{
-              name: user.email.split('@')[0],
+              name: user.email.split("@")[0],
               email: user.email,
-              avatar: '',
+              avatar: "",
             }}
             onLogout={handleLogout}
           />
         )}
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
-

@@ -1,20 +1,22 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 export interface Notification {
-  id: string
-  title: string
-  message: string
-  type: 'info' | 'success' | 'warning' | 'error'
-  timestamp: number
-  read: boolean
+  id: string;
+  title: string;
+  message: string;
+  type: "info" | "success" | "warning" | "error";
+  timestamp: number;
+  read: boolean;
 }
 
 interface NotificationStore {
-  notifications: Notification[]
-  addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => void
-  markAsRead: (id: string) => void
-  clearAll: () => void
-  unreadCount: number
+  notifications: Notification[];
+  addNotification: (
+    notification: Omit<Notification, "id" | "timestamp" | "read">,
+  ) => void;
+  markAsRead: (id: string) => void;
+  clearAll: () => void;
+  unreadCount: number;
 }
 
 export const useNotificationStore = create<NotificationStore>((set) => ({
@@ -26,25 +28,24 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
       id: Date.now().toString(),
       timestamp: Date.now(),
       read: false,
-    }
+    };
     set((state) => ({
       notifications: [newNotification, ...state.notifications],
       unreadCount: state.unreadCount + 1,
-    }))
+    }));
   },
   markAsRead: (id) => {
     set((state) => ({
       notifications: state.notifications.map((n) =>
-        n.id === id ? { ...n, read: true } : n
+        n.id === id ? { ...n, read: true } : n,
       ),
       unreadCount: Math.max(0, state.unreadCount - 1),
-    }))
+    }));
   },
   clearAll: () => {
     set({
       notifications: [],
       unreadCount: 0,
-    })
+    });
   },
-}))
-
+}));

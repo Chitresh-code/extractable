@@ -1,14 +1,30 @@
-import * as React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Plus, FileText, Clock, CheckCircle2, XCircle, Loader2, MoreVertical, Eye, Download } from 'lucide-react'
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Plus,
+  FileText,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  Loader2,
+  MoreVertical,
+  Eye,
+  Download,
+} from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
-} from '../ui/breadcrumb'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
-import { Button } from '../ui/button'
+} from "../ui/breadcrumb";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Button } from "../ui/button";
 import {
   Table,
   TableBody,
@@ -16,9 +32,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../ui/table'
-import { Badge } from '../ui/badge'
-import { Spinner } from '../ui/spinner'
+} from "../ui/table";
+import { Badge } from "../ui/badge";
+import { Spinner } from "../ui/spinner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,62 +42,62 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu'
-import { extractionApi } from '../../services/api'
-import type { Extraction } from '../../types'
-import { formatDistanceToNow } from 'date-fns'
-import { AddExtractionDialog } from './AddExtractionDialog'
-import { useNotificationStore } from '../../store/notificationStore'
+} from "../ui/dropdown-menu";
+import { extractionApi } from "../../services/api";
+import type { Extraction } from "../../types";
+import { formatDistanceToNow } from "date-fns";
+import { AddExtractionDialog } from "./AddExtractionDialog";
+import { useNotificationStore } from "../../store/notificationStore";
 
 export function HomePage() {
-  const navigate = useNavigate()
-  const [extractions, setExtractions] = React.useState<Extraction[]>([])
-  const [loading, setLoading] = React.useState(true)
-  const [dialogOpen, setDialogOpen] = React.useState(false)
-  const { addNotification } = useNotificationStore()
+  const navigate = useNavigate();
+  const [extractions, setExtractions] = React.useState<Extraction[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const { addNotification } = useNotificationStore();
 
   React.useEffect(() => {
-    loadExtractions()
-  }, [])
+    loadExtractions();
+  }, []);
 
   const loadExtractions = async () => {
     try {
-      setLoading(true)
-      const response = await extractionApi.list(1, 5, undefined, undefined)
-      setExtractions(response.items)
+      setLoading(true);
+      const response = await extractionApi.list(1, 5, undefined, undefined);
+      setExtractions(response.items);
     } catch (error) {
-      console.error('Failed to load extractions:', error)
+      console.error("Failed to load extractions:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const getStatusBadge = (status: Extraction['status']) => {
+  const getStatusBadge = (status: Extraction["status"]) => {
     const variants = {
-      pending: 'secondary',
-      processing: 'default',
-      completed: 'default',
-      failed: 'destructive',
-    } as const
+      pending: "secondary",
+      processing: "default",
+      completed: "default",
+      failed: "destructive",
+    } as const;
 
     const icons = {
       pending: Clock,
       processing: Loader2,
       completed: CheckCircle2,
       failed: XCircle,
-    }
+    };
 
-    const Icon = icons[status]
-    const variant = variants[status]
+    const Icon = icons[status];
+    const variant = variants[status];
 
     return (
       <Badge variant={variant} className="flex items-center gap-1">
-        {status === 'processing' && <Icon className="h-3 w-3 animate-spin" />}
-        {status !== 'processing' && <Icon className="h-3 w-3" />}
+        {status === "processing" && <Icon className="h-3 w-3 animate-spin" />}
+        {status !== "processing" && <Icon className="h-3 w-3" />}
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
-    )
-  }
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -108,7 +124,9 @@ export function HomePage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Extractions</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Extractions
+            </CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -125,7 +143,7 @@ export function HomePage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {extractions.filter((e) => e.status === 'completed').length}
+              {extractions.filter((e) => e.status === "completed").length}
             </div>
           </CardContent>
         </Card>
@@ -136,7 +154,7 @@ export function HomePage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {extractions.filter((e) => e.status === 'processing').length}
+              {extractions.filter((e) => e.status === "processing").length}
             </div>
           </CardContent>
         </Card>
@@ -147,7 +165,7 @@ export function HomePage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {extractions.filter((e) => e.status === 'failed').length}
+              {extractions.filter((e) => e.status === "failed").length}
             </div>
           </CardContent>
         </Card>
@@ -158,11 +176,12 @@ export function HomePage() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Recent Extractions</CardTitle>
-              <CardDescription>
-                Your last 5 extraction jobs
-              </CardDescription>
+              <CardDescription>Your last 5 extraction jobs</CardDescription>
             </div>
-            <Button variant="outline" onClick={() => navigate('/dashboard/extractions')}>
+            <Button
+              variant="outline"
+              onClick={() => navigate("/dashboard/extractions")}
+            >
               View All
             </Button>
           </div>
@@ -192,16 +211,17 @@ export function HomePage() {
                   <TableRow
                     key={extraction.id}
                     className="cursor-pointer"
-                    onClick={() => navigate(`/dashboard/extractions/${extraction.id}`)}
+                    onClick={() =>
+                      navigate(`/dashboard/extractions/${extraction.id}`)
+                    }
                   >
                     <TableCell className="font-medium">
-                      {extraction.input_filename || `Extraction #${extraction.id}`}
+                      {extraction.input_filename ||
+                        `Extraction #${extraction.id}`}
                     </TableCell>
                     <TableCell>{getStatusBadge(extraction.status)}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">
-                        {extraction.complexity}
-                      </Badge>
+                      <Badge variant="outline">{extraction.complexity}</Badge>
                     </TableCell>
                     <TableCell>
                       {formatDistanceToNow(new Date(extraction.created_at), {
@@ -211,8 +231,8 @@ export function HomePage() {
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="icon"
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -224,40 +244,46 @@ export function HomePage() {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={(e) => {
-                              e.stopPropagation()
-                              navigate(`/dashboard/extractions/${extraction.id}`)
+                              e.stopPropagation();
+                              navigate(
+                                `/dashboard/extractions/${extraction.id}`,
+                              );
                             }}
                           >
                             <Eye className="mr-2 h-4 w-4" />
                             View
                           </DropdownMenuItem>
-                          {extraction.status === 'completed' && (
+                          {extraction.status === "completed" && (
                             <>
                               <DropdownMenuItem
                                 onClick={async (e) => {
-                                  e.stopPropagation()
+                                  e.stopPropagation();
                                   try {
-                                    const blob = await extractionApi.download(extraction.id, 'json')
-                                    const url = window.URL.createObjectURL(blob)
-                                    const a = document.createElement('a')
-                                    a.href = url
-                                    a.download = `extraction_${extraction.id}.json`
-                                    document.body.appendChild(a)
-                                    a.click()
-                                    window.URL.revokeObjectURL(url)
-                                    document.body.removeChild(a)
+                                    const blob = await extractionApi.download(
+                                      extraction.id,
+                                      "json",
+                                    );
+                                    const url =
+                                      window.URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `extraction_${extraction.id}.json`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    window.URL.revokeObjectURL(url);
+                                    document.body.removeChild(a);
                                     addNotification({
-                                      title: 'Download Complete',
+                                      title: "Download Complete",
                                       message: `Extraction ${extraction.id} downloaded as JSON.`,
-                                      type: 'success',
-                                    })
+                                      type: "success",
+                                    });
                                   } catch (err) {
-                                    console.error('Download failed:', err)
+                                    console.error("Download failed:", err);
                                     addNotification({
-                                      title: 'Error',
+                                      title: "Error",
                                       message: `Failed to download extraction ${extraction.id}.`,
-                                      type: 'error',
-                                    })
+                                      type: "error",
+                                    });
                                   }
                                 }}
                               >
@@ -266,29 +292,33 @@ export function HomePage() {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={async (e) => {
-                                  e.stopPropagation()
+                                  e.stopPropagation();
                                   try {
-                                    const blob = await extractionApi.download(extraction.id, 'csv')
-                                    const url = window.URL.createObjectURL(blob)
-                                    const a = document.createElement('a')
-                                    a.href = url
-                                    a.download = `extraction_${extraction.id}.csv`
-                                    document.body.appendChild(a)
-                                    a.click()
-                                    window.URL.revokeObjectURL(url)
-                                    document.body.removeChild(a)
+                                    const blob = await extractionApi.download(
+                                      extraction.id,
+                                      "csv",
+                                    );
+                                    const url =
+                                      window.URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `extraction_${extraction.id}.csv`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    window.URL.revokeObjectURL(url);
+                                    document.body.removeChild(a);
                                     addNotification({
-                                      title: 'Download Complete',
+                                      title: "Download Complete",
                                       message: `Extraction ${extraction.id} downloaded as CSV.`,
-                                      type: 'success',
-                                    })
+                                      type: "success",
+                                    });
                                   } catch (err) {
-                                    console.error('Download failed:', err)
+                                    console.error("Download failed:", err);
                                     addNotification({
-                                      title: 'Error',
+                                      title: "Error",
                                       message: `Failed to download extraction ${extraction.id}.`,
-                                      type: 'error',
-                                    })
+                                      type: "error",
+                                    });
                                   }
                                 }}
                               >
@@ -297,29 +327,33 @@ export function HomePage() {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={async (e) => {
-                                  e.stopPropagation()
+                                  e.stopPropagation();
                                   try {
-                                    const blob = await extractionApi.download(extraction.id, 'excel')
-                                    const url = window.URL.createObjectURL(blob)
-                                    const a = document.createElement('a')
-                                    a.href = url
-                                    a.download = `extraction_${extraction.id}.xlsx`
-                                    document.body.appendChild(a)
-                                    a.click()
-                                    window.URL.revokeObjectURL(url)
-                                    document.body.removeChild(a)
+                                    const blob = await extractionApi.download(
+                                      extraction.id,
+                                      "excel",
+                                    );
+                                    const url =
+                                      window.URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `extraction_${extraction.id}.xlsx`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    window.URL.revokeObjectURL(url);
+                                    document.body.removeChild(a);
                                     addNotification({
-                                      title: 'Download Complete',
+                                      title: "Download Complete",
                                       message: `Extraction ${extraction.id} downloaded as Excel.`,
-                                      type: 'success',
-                                    })
+                                      type: "success",
+                                    });
                                   } catch (err) {
-                                    console.error('Download failed:', err)
+                                    console.error("Download failed:", err);
                                     addNotification({
-                                      title: 'Error',
+                                      title: "Error",
                                       message: `Failed to download extraction ${extraction.id}.`,
-                                      type: 'error',
-                                    })
+                                      type: "error",
+                                    });
                                   }
                                 }}
                               >
@@ -343,11 +377,10 @@ export function HomePage() {
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         onSuccess={(extraction) => {
-          setDialogOpen(false)
-          navigate(`/dashboard/extractions/${extraction.id}`)
+          setDialogOpen(false);
+          navigate(`/dashboard/extractions/${extraction.id}`);
         }}
       />
     </div>
-  )
+  );
 }
-

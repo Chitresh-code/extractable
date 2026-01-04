@@ -4,14 +4,14 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '../ui/dialog'
-import { ExtractionForm } from '../extraction/ExtractionForm'
-import type { Extraction } from '../../types'
+} from "../ui/dialog";
+import { ExtractionForm } from "../extraction/ExtractionForm";
+import type { Extraction } from "../../types";
 
 interface AddExtractionDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSuccess: (extraction: Extraction) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSuccess: (extraction: Extraction) => void;
 }
 
 export function AddExtractionDialog({
@@ -20,8 +20,8 @@ export function AddExtractionDialog({
   onSuccess,
 }: AddExtractionDialogProps) {
   const handleSuccess = (extraction: Extraction) => {
-    onSuccess(extraction)
-  }
+    onSuccess(extraction);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -33,13 +33,12 @@ export function AddExtractionDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4">
-          <ExtractionForm 
-            onSuccess={handleSuccess} 
+          <ExtractionForm
+            onSuccess={handleSuccess}
             onCancel={() => onOpenChange(false)}
           />
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

@@ -1,12 +1,12 @@
-import { Link } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
-import { Upload, Bot, CheckCircle2, Sparkles, Download } from 'lucide-react'
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { Upload, Bot, CheckCircle2, Sparkles, Download } from "lucide-react";
 
 export const LandingPage: React.FC = () => {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   if (user) {
-    return null // Don't show landing page if user is logged in
+    return null; // Don't show landing page if user is logged in
   }
 
   return (
@@ -55,7 +55,7 @@ export const LandingPage: React.FC = () => {
           {/* Main Heading */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 leading-tight">
             <span className="block bg-linear-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent">
-              Extract Tables from{' '}
+              Extract Tables from{" "}
               <span className="bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent animate-gradient">
                 PDFs & Images
               </span>
@@ -67,9 +67,11 @@ export const LandingPage: React.FC = () => {
 
           {/* Subheading */}
           <p className="text-xl md:text-2xl text-slate-600 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-            Transform unstructured documents into structured data with our advanced AI pipeline.
+            Transform unstructured documents into structured data with our
+            advanced AI pipeline.
             <span className="block mt-2 text-lg text-slate-500">
-              Get accurate, formatted results in multiple formats - no manual work required.
+              Get accurate, formatted results in multiple formats - no manual
+              work required.
             </span>
           </p>
 
@@ -106,41 +108,78 @@ export const LandingPage: React.FC = () => {
           {[
             {
               icon: (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               ),
-              gradient: 'from-green-500 to-emerald-600',
-              title: 'Cost-Effective',
-              description: 'Affordable pricing that scales with your needs. No hidden fees or expensive enterprise plans - just straightforward, transparent pricing.',
+              gradient: "from-green-500 to-emerald-600",
+              title: "Cost-Effective",
+              description:
+                "Affordable pricing that scales with your needs. No hidden fees or expensive enterprise plans - just straightforward, transparent pricing.",
             },
             {
               icon: (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               ),
-              gradient: 'from-blue-500 to-cyan-600',
-              title: 'Highly Accurate',
-              description: 'Multi-pass validation ensures you get the most accurate table extraction results with context-aware processing and error detection.',
+              gradient: "from-blue-500 to-cyan-600",
+              title: "Highly Accurate",
+              description:
+                "Multi-pass validation ensures you get the most accurate table extraction results with context-aware processing and error detection.",
             },
             {
               icon: (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  />
                 </svg>
               ),
-              gradient: 'from-purple-500 to-pink-600',
-              title: 'User-Friendly',
-              description: 'Simple, intuitive interface that anyone can use. No technical expertise required - just upload your files and get results.',
+              gradient: "from-purple-500 to-pink-600",
+              title: "User-Friendly",
+              description:
+                "Simple, intuitive interface that anyone can use. No technical expertise required - just upload your files and get results.",
             },
           ].map((feature, idx) => (
             <div
               key={idx}
               className="group relative bg-white p-8 rounded-2xl border border-slate-200 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
             >
-              <div className={`absolute inset-0 bg-linear-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-              <div className={`w-16 h-16 bg-linear-to-br ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+              <div
+                className={`absolute inset-0 bg-linear-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+              />
+              <div
+                className={`w-16 h-16 bg-linear-to-br ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}
+              >
                 {feature.icon}
               </div>
               <h3 className="text-2xl font-bold mb-3 text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
@@ -167,11 +206,36 @@ export const LandingPage: React.FC = () => {
           </div>
           <div className="grid md:grid-cols-5 gap-6 max-w-6xl mx-auto relative">
             {[
-              { num: 1, title: 'Upload', desc: 'Upload your PDF or image files', icon: Upload },
-              { num: 2, title: 'Extract', desc: 'AI extracts tables automatically', icon: Bot },
-              { num: 3, title: 'Validate', desc: 'Multi-pass validation ensures accuracy', icon: CheckCircle2 },
-              { num: 4, title: 'Refine', desc: 'Final consolidation and refinement', icon: Sparkles },
-              { num: 5, title: 'Download', desc: 'Get your structured data', icon: Download },
+              {
+                num: 1,
+                title: "Upload",
+                desc: "Upload your PDF or image files",
+                icon: Upload,
+              },
+              {
+                num: 2,
+                title: "Extract",
+                desc: "AI extracts tables automatically",
+                icon: Bot,
+              },
+              {
+                num: 3,
+                title: "Validate",
+                desc: "Multi-pass validation ensures accuracy",
+                icon: CheckCircle2,
+              },
+              {
+                num: 4,
+                title: "Refine",
+                desc: "Final consolidation and refinement",
+                icon: Sparkles,
+              },
+              {
+                num: 5,
+                title: "Download",
+                desc: "Get your structured data",
+                icon: Download,
+              },
             ].map((step, idx) => (
               <div key={step.num} className="text-center relative group">
                 <div className="mb-6 relative">
@@ -214,7 +278,8 @@ export const LandingPage: React.FC = () => {
                 Ready to Get Started?
               </h2>
               <p className="text-xl text-blue-100 mb-8 leading-relaxed max-w-2xl mx-auto">
-                Start extracting tables from your documents today. Simple, accurate, and affordable.
+                Start extracting tables from your documents today. Simple,
+                accurate, and affordable.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
@@ -243,22 +308,32 @@ export const LandingPage: React.FC = () => {
               Extractable
             </div>
             <div className="flex items-center gap-6 text-sm text-slate-600">
-              <a href="#" className="hover:text-blue-600 transition-colors duration-200">
+              <a
+                href="#"
+                className="hover:text-blue-600 transition-colors duration-200"
+              >
                 Privacy
               </a>
-              <a href="#" className="hover:text-blue-600 transition-colors duration-200">
+              <a
+                href="#"
+                className="hover:text-blue-600 transition-colors duration-200"
+              >
                 Terms
               </a>
-              <a href="#" className="hover:text-blue-600 transition-colors duration-200">
+              <a
+                href="#"
+                className="hover:text-blue-600 transition-colors duration-200"
+              >
                 Support
               </a>
             </div>
             <div className="text-sm text-slate-600">
-              &copy; {new Date().getFullYear()} Extractable. All rights reserved.
+              &copy; {new Date().getFullYear()} Extractable. All rights
+              reserved.
             </div>
           </div>
         </div>
       </footer>
     </div>
-  )
-}
+  );
+};

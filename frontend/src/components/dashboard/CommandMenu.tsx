@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import {
   Command,
   CommandEmpty,
@@ -6,24 +6,24 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '../ui/command'
-import { Home, FileText } from 'lucide-react'
+} from "../ui/command";
+import { Home, FileText } from "lucide-react";
 
 export function CommandMenu() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const commands = [
     {
-      title: 'Home',
+      title: "Home",
       icon: Home,
-      action: () => navigate('/dashboard'),
+      action: () => navigate("/dashboard"),
     },
     {
-      title: 'Extractions',
+      title: "Extractions",
       icon: FileText,
-      action: () => navigate('/dashboard/extractions'),
+      action: () => navigate("/dashboard/extractions"),
     },
-  ]
+  ];
 
   return (
     <Command>
@@ -35,7 +35,7 @@ export function CommandMenu() {
             <CommandItem
               key={command.title}
               onSelect={() => {
-                command.action()
+                command.action();
               }}
             >
               <command.icon className="mr-2 h-4 w-4" />
@@ -45,6 +45,5 @@ export function CommandMenu() {
         </CommandGroup>
       </CommandList>
     </Command>
-  )
+  );
 }
-

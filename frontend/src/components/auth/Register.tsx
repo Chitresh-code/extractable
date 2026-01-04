@@ -1,6 +1,6 @@
-import { GalleryVerticalEnd } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { RegisterForm } from './RegisterForm'
+import { GalleryVerticalEnd } from "lucide-react";
+import { Link } from "react-router-dom";
+import { RegisterForm } from "./RegisterForm";
 
 export const Register: React.FC = () => {
   return (
@@ -12,7 +12,8 @@ export const Register: React.FC = () => {
           <div className="text-white space-y-6 max-w-md">
             <h2 className="text-4xl font-bold">Get Started with Extractable</h2>
             <p className="text-lg text-blue-100">
-              Join Extractable and start transforming your documents into structured data in minutes.
+              Join Extractable and start transforming your documents into
+              structured data in minutes.
             </p>
             <div className="space-y-4 pt-4">
               <div className="flex items-start gap-3">
@@ -32,9 +33,12 @@ export const Register: React.FC = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Highly Accurate Extraction</h3>
+                  <h3 className="font-semibold mb-1">
+                    Highly Accurate Extraction
+                  </h3>
                   <p className="text-sm text-blue-50">
-                    Multi-pass validation ensures precise table extraction from your PDFs and images.
+                    Multi-pass validation ensures precise table extraction from
+                    your PDFs and images.
                   </p>
                 </div>
               </div>
@@ -55,9 +59,12 @@ export const Register: React.FC = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Cost-Effective Solution</h3>
+                  <h3 className="font-semibold mb-1">
+                    Cost-Effective Solution
+                  </h3>
                   <p className="text-sm text-blue-50">
-                    Affordable pricing with transparent costs. No hidden fees or surprise charges.
+                    Affordable pricing with transparent costs. No hidden fees or
+                    surprise charges.
                   </p>
                 </div>
               </div>
@@ -78,9 +85,12 @@ export const Register: React.FC = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Multiple Export Formats</h3>
+                  <h3 className="font-semibold mb-1">
+                    Multiple Export Formats
+                  </h3>
                   <p className="text-sm text-blue-50">
-                    Download your extracted data as JSON, CSV, or Excel - whatever works for your workflow.
+                    Download your extracted data as JSON, CSV, or Excel -
+                    whatever works for your workflow.
                   </p>
                 </div>
               </div>
@@ -103,7 +113,8 @@ export const Register: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-1">Easy to Use</h3>
                   <p className="text-sm text-blue-50">
-                    Simple, intuitive interface. No technical expertise required - just upload and extract.
+                    Simple, intuitive interface. No technical expertise required
+                    - just upload and extract.
                   </p>
                 </div>
               </div>
@@ -128,5 +139,5 @@ export const Register: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
