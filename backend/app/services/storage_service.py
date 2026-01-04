@@ -8,7 +8,7 @@ from typing import Dict, Any, List
 from app.models.extraction import Extraction
 from app.models.enums import ExtractionStatus
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -48,7 +48,7 @@ def store_extraction_outputs(
     extraction.llm_extraction_output = extraction_results
     extraction.llm_validation_output = validation_results
     extraction.llm_final_output = final_llm_output
-    extraction.completed_at = datetime.utcnow()
+    extraction.completed_at = datetime.now(timezone.utc)
 
     db.commit()
     db.refresh(extraction)  # Refresh to ensure JSON fields are properly loaded
