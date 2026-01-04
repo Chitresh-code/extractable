@@ -25,6 +25,8 @@ class UserResponse(UserBase):
     """Schema for user response."""
 
     id: int
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     is_active: bool
     is_verified: bool
     created_at: datetime
@@ -37,6 +39,8 @@ class UserUpdate(BaseModel):
     """Schema for updating user profile."""
 
     email: Optional[EmailStr] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
 
 
 class PasswordChange(BaseModel):

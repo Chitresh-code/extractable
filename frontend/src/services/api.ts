@@ -142,7 +142,11 @@ export const userApi = {
     return response.data;
   },
 
-  updateProfile: async (data: { email?: string }): Promise<User> => {
+  updateProfile: async (data: {
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+  }): Promise<User> => {
     const response = await api.patch("/users/me", data);
     return response.data;
   },
