@@ -98,13 +98,19 @@ jobs:
           client = TestClient(app)
           print('✓ Test client created successfully')
           
-          # Test that app can handle a request (try docs endpoint)
-          try:
-              response = client.get('/docs')
-              assert response.status_code in [200, 404, 307, 308]  # 200 for docs, 307/308 for redirect, 404 if not available
-              print(f'✓ App can handle requests (docs endpoint: {response.status_code})')
-          except Exception as e:
-              print(f'Warning: Could not test /docs endpoint: {e}')
+          # Test health check endpoint
+          response = client.get('/health')
+          assert response.status_code == 200
+          assert response.json() == {'status': 'healthy'}
+          print('✓ Health check endpoint works')
+          
+          # Test API versions endpoint
+          response = client.get('/api/versions')
+          assert response.status_code == 200
+          data = response.json()
+          assert 'current_version' in data
+          assert 'supported_versions' in data
+          print('✓ API versions endpoint works')
           
           # Test API routes are registered
           api_routes = [r for r in routes if r.startswith('/api')]
