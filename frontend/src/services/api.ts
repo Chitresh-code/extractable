@@ -134,3 +134,24 @@ export const extractionApi = {
     await api.delete(`/extractions/${id}`);
   },
 };
+
+// User endpoints
+export const userApi = {
+  getProfile: async (): Promise<User> => {
+    const response = await api.get("/users/me");
+    return response.data;
+  },
+
+  updateProfile: async (data: { email?: string }): Promise<User> => {
+    const response = await api.patch("/users/me", data);
+    return response.data;
+  },
+
+  changePassword: async (data: {
+    current_password: string;
+    new_password: string;
+  }): Promise<User> => {
+    const response = await api.post("/users/me/change-password", data);
+    return response.data;
+  },
+};

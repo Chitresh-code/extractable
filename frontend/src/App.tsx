@@ -8,6 +8,7 @@ import { DashboardLayout } from "./components/dashboard/DashboardLayout";
 import { HomePage } from "./components/dashboard/HomePage";
 import { ExtractionsPage } from "./components/dashboard/ExtractionsPage";
 import { ExtractionDetailPage } from "./components/dashboard/ExtractionDetailPage";
+import { AccountPage } from "./components/dashboard/AccountPage";
 import { Toaster } from "./components/ui/sonner";
 
 function App() {
@@ -43,6 +44,16 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <ExtractionDetailPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/account"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <AccountPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }

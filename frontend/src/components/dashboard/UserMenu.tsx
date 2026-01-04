@@ -59,7 +59,7 @@ export function UserMenu({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate("/dashboard/account")}>
             <UserCircleIcon className="mr-2 h-4 w-4" />
             Account
           </DropdownMenuItem>

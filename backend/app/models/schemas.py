@@ -33,6 +33,19 @@ class UserResponse(UserBase):
         from_attributes = True
 
 
+class UserUpdate(BaseModel):
+    """Schema for updating user profile."""
+
+    email: Optional[EmailStr] = None
+
+
+class PasswordChange(BaseModel):
+    """Schema for changing password."""
+
+    current_password: str
+    new_password: str
+
+
 # Authentication Schemas
 class Token(BaseModel):
     """JWT token response schema."""
