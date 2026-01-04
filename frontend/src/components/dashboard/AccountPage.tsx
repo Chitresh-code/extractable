@@ -26,7 +26,7 @@ import { Badge } from "../ui/badge";
 import { Mail, Lock, User, Calendar, CheckCircle2, XCircle } from "lucide-react";
 
 export function AccountPage() {
-  const { user, refreshUser } = useAuth();
+  const { user } = useAuth();
   const [emailLoading, setEmailLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
 
@@ -59,10 +59,6 @@ export function AccountPage() {
     setEmailLoading(true);
     try {
       await userApi.updateProfile({ email });
-      // Refresh user data
-      const updatedUser = await authApi.me();
-      // Update user in context by calling login with current credentials
-      // For now, just show success - user will see updated email on next page load
       toast.success("Email updated successfully");
       setEmailError("");
       // Reload page to refresh user context
