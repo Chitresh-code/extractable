@@ -9,6 +9,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from app.core.config import settings
 import logging
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -64,3 +65,13 @@ def decode_access_token(token: str) -> Optional[dict]:
     except JWTError as e:
         logger.warning(f"JWT decoding failed: {e}")
         return None
+
+
+def generate_password_reset_token() -> str:
+    """
+    Generate a secure random token for password reset.
+
+    Returns:
+        Secure random token string
+    """
+    return secrets.token_urlsafe(32)

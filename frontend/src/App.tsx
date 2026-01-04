@@ -4,6 +4,8 @@ import { LandingPage } from "./components/common/LandingPage";
 import { ProtectedRoute } from "./components/common/ProtectedRoute";
 import { Login } from "./components/auth/Login";
 import { Register } from "./components/auth/Register";
+import { ForgotPassword } from "./components/auth/ForgotPassword";
+import { ResetPassword } from "./components/auth/ResetPassword";
 import { DashboardLayout } from "./components/dashboard/DashboardLayout";
 import { HomePage } from "./components/dashboard/HomePage";
 import { ExtractionsPage } from "./components/dashboard/ExtractionsPage";
@@ -18,6 +20,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/dashboard"
             element={

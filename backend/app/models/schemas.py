@@ -50,6 +50,19 @@ class PasswordChange(BaseModel):
     new_password: str
 
 
+class ForgotPassword(BaseModel):
+    """Schema for forgot password request."""
+
+    email: EmailStr
+
+
+class ResetPassword(BaseModel):
+    """Schema for resetting password with token."""
+
+    token: str
+    new_password: str
+
+
 # Authentication Schemas
 class Token(BaseModel):
     """JWT token response schema."""

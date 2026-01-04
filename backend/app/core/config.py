@@ -83,6 +83,11 @@ class Settings(BaseSettings):
     # API Version
     api_version: str = "v1"
 
+    # Email Configuration (Resend)
+    resend_api_key: str = ""
+    resend_from_email: str = "Extractable <noreply@extractable.in>"
+    frontend_url: str = "http://localhost:5173"  # For password reset links
+
     model_config = SettingsConfigDict(
         env_file=".env",  # Try to read from .env file if it exists
         env_file_encoding="utf-8",
