@@ -149,10 +149,20 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ extraction }) =>
     const tableData = currentExtraction.table_data
     
     // Handle different table data structures
-    if (tableData.tables && Array.isArray(tableData.tables)) {
-      return tableData.tables.map((table: { columns?: unknown[]; rows?: unknown[][] }, tableIdx: number) => (
+    if (
+      tableData &&
+      typeof tableData === 'object' &&
+      'tables' in tableData &&
+      Array.isArray(tableData.tables)
+    ) {
+      const tables = tableData.tables as Array<{
+        columns?: string[]
+        rows?: Array<Record<string, unknown>>
+      }>
+      
+      return tables.map((table, tableIdx: number) => (
         <div key={tableIdx} className="mt-4">
-          {tableData.tables.length > 1 && (
+          {tables.length > 1 && (
             <h3 className="text-lg font-semibold mb-2">Table {tableIdx + 1}</h3>
           )}
           {table.columns && table.rows && (
@@ -170,7 +180,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ extraction }) =>
                 <tbody>
                   {table.rows.map((row: Record<string, unknown>, rowIdx: number) => (
                     <tr key={rowIdx} className={rowIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      {table.columns.map((col: string, colIdx: number) => (
+                      {table.columns?.map((col: string, colIdx: number) => (
                         <td key={colIdx} className="border border-gray-300 px-4 py-2">
                           {row[col] !== null && row[col] !== undefined ? String(row[col]) : ''}
                         </td>
