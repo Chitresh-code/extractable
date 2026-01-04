@@ -28,9 +28,7 @@ class Extraction(Base):
     multiple_tables = Column(Boolean, default=False)
     output_format = Column(String, default=OutputFormat.JSON.value)
     complexity = Column(String, default="regular")  # simple, regular, or complex
-
-    # Output storage
-    output_file_path = Column(String)  # Path to stored output file
+    priority = Column(String, default="medium")  # high, medium, low
 
     # LLM outputs (stored for reference)
     llm_extraction_output = Column(JSON)  # Full extraction responses

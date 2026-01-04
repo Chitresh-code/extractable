@@ -3,7 +3,7 @@ Finalization service (Step 4).
 Generates final structured output from all extractions and validations.
 """
 
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import logging
 from app.services.openai_client import openai_client
 
@@ -11,7 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 def build_finalization_prompt(
-    extraction_results: List[Dict[str, Any]], validation_results: List[Dict[str, Any]], multiple_tables: bool = False
+    extraction_results: List[Dict[str, Any]], 
+    validation_results: List[Dict[str, Any]], 
+    multiple_tables: bool = False,
+    columns: Optional[List[str]] = None
 ) -> str:
     """
     Build optimized prompt for final output generation (more concise).
@@ -36,11 +39,23 @@ Extractions: {results_str}
 Validations: {validations_str}
 
 {"Multiple tables: keep separate." if multiple_tables else "Single table."}
+"""
+    
+    if columns:
+        columns_json = json.dumps(columns)
+        prompt += f"""
+CRITICAL: Use the EXACT column names: {', '.join(columns)}
+Return JSON with these exact columns:
+{{"tables":[{{"table_index":1,"columns":{columns_json},"rows":[{{"{columns[0]}":"val1","{columns[1] if len(columns) > 1 else 'column2'}":"val2",...}}]}}]}}
 
-Address validation issues. Return JSON:
-{{"tables":[{{"table_index":1,"columns":["col1","col2"],"rows":[{{"col1":"val1","col2":"val2"}}]}}]}}
+Do NOT use generic names like "col1", "col2". Use: {', '.join(columns)}
+"""
+    else:
+        prompt += """Address validation issues. Return JSON:
+{"tables":[{"table_index":1,"columns":["col1","col2"],"rows":[{"col1":"val1","col2":"val2"}]}]}
+"""
 
-Return ONLY valid JSON, no markdown."""
+    prompt += "Return ONLY valid JSON, no markdown."
 
     return prompt
 
@@ -51,6 +66,7 @@ async def generate_final_output(
     validation_results: List[Dict[str, Any]],
     multiple_tables: bool = False,
     complexity: str = "complex",
+    columns: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """
     Generate final structured output from all extractions and validations.
@@ -65,7 +81,7 @@ async def generate_final_output(
         Final consolidated table data
     """
     # Build prompt
-    prompt = build_finalization_prompt(extraction_results, validation_results, multiple_tables)
+    prompt = build_finalization_prompt(extraction_results, validation_results, multiple_tables, columns)
 
     # Call OpenAI API with specified complexity for finalization
     response = await openai_client.generate_content(user_id=user_id, prompt=prompt, images=None, complexity=complexity)

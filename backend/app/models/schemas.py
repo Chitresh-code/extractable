@@ -33,6 +33,19 @@ class UserResponse(UserBase):
         from_attributes = True
 
 
+class UserUpdate(BaseModel):
+    """Schema for updating user profile."""
+
+    email: Optional[EmailStr] = None
+
+
+class PasswordChange(BaseModel):
+    """Schema for changing password."""
+
+    current_password: str
+    new_password: str
+
+
 # Authentication Schemas
 class Token(BaseModel):
     """JWT token response schema."""
@@ -55,6 +68,7 @@ class ExtractionCreate(BaseModel):
     multiple_tables: bool = False
     output_format: str = OutputFormat.JSON.value
     complexity: str = "regular"  # simple, regular, or complex
+    priority: str = "medium"  # high, medium, low
 
 
 class ExtractionResponse(BaseModel):
@@ -69,7 +83,7 @@ class ExtractionResponse(BaseModel):
     multiple_tables: bool
     output_format: str
     complexity: str
-    output_file_path: Optional[str]
+    priority: str
     table_data: Optional[Dict[str, Any]] = None
     llm_extraction_output: Optional[List[Dict[str, Any]]] = None
     llm_validation_output: Optional[List[Dict[str, Any]]] = None

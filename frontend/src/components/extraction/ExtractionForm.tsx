@@ -1,44 +1,74 @@
-import { useState } from 'react'
-import { extractionApi } from '../../services/api'
-import type { Extraction } from '../../types'
+import { useState } from "react";
+import { extractionApi } from "../../services/api";
+import type { Extraction } from "../../types";
+import { Button } from "../ui/button";
 
 interface ExtractionFormProps {
-  onSuccess: (extraction: Extraction) => void
+  onSuccess: (extraction: Extraction) => void;
+  onCancel?: () => void;
 }
 
-export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess }) => {
-  const [file, setFile] = useState<File | null>(null)
-  const [columns, setColumns] = useState('')
-  const [multipleTables, setMultipleTables] = useState(false)
-  const [complexity, setComplexity] = useState<'simple' | 'regular' | 'complex'>('regular')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+export const ExtractionForm: React.FC<ExtractionFormProps> = ({
+  onSuccess,
+  onCancel,
+}) => {
+  const [file, setFile] = useState<File | null>(null);
+  const [name, setName] = useState("");
+  const [columns, setColumns] = useState("");
+  const [multipleTables, setMultipleTables] = useState(false);
+  const [complexity, setComplexity] = useState<
+    "simple" | "regular" | "complex"
+  >("regular");
+  const [priority, setPriority] = useState<"high" | "medium" | "low">("medium");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!file) {
-      setError('Please select a file')
-      return
+      setError("Please select a file");
+      return;
     }
 
-    setError('')
-    setLoading(true)
+    setError("");
+    setLoading(true);
 
     try {
+      // Determine the filename to use
+      const extractionName = name.trim() || file.name;
+
       const extraction = await extractionApi.create(
         file,
         columns || undefined,
         multipleTables,
-        complexity
-      )
-      onSuccess(extraction)
+        complexity,
+        priority,
+      );
+
+      // Update extraction name if different from file name
+      // Try to update, but don't fail if it's already processing
+      if (extractionName !== file.name) {
+        try {
+          await extractionApi.update(extraction.id, {
+            input_filename: extractionName,
+          });
+          extraction.input_filename = extractionName;
+        } catch (updateError) {
+          // If update fails (e.g., already processing), log but don't fail
+          console.warn("Could not update extraction name:", updateError);
+          // Still use the name for the extraction object
+          extraction.input_filename = extractionName;
+        }
+      }
+
+      onSuccess(extraction);
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { detail?: string } } }
-      setError(error.response?.data?.detail || 'Failed to create extraction')
+      const error = err as { response?: { data?: { detail?: string } } };
+      setError(error.response?.data?.detail || "Failed to create extraction");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="bg-card p-6 rounded-lg border">
@@ -57,10 +87,35 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess }) => 
             id="file"
             type="file"
             accept=".pdf,.png,.jpg,.jpeg"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
+            onChange={(e) => {
+              const selectedFile = e.target.files?.[0] || null;
+              setFile(selectedFile);
+              // Auto-fill name with filename if name is empty
+              if (selectedFile && !name.trim()) {
+                setName(selectedFile.name);
+              }
+            }}
             required
             className="w-full px-3 py-2 border rounded-md"
           />
+        </div>
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium mb-2">
+            Extraction Name (optional)
+          </label>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={file ? file.name : "Leave blank to use file name"}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+          <p className="text-xs text-muted-foreground mt-1">
+            {file
+              ? `Default: ${file.name}`
+              : "Enter a custom name or leave blank to use file name"}
+          </p>
         </div>
         <div>
           <label htmlFor="columns" className="block text-sm font-medium mb-2">
@@ -88,29 +143,61 @@ export const ExtractionForm: React.FC<ExtractionFormProps> = ({ onSuccess }) => 
           </label>
         </div>
         <div>
-          <label htmlFor="complexity" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="complexity"
+            className="block text-sm font-medium mb-2"
+          >
             Pipeline Complexity
           </label>
           <select
             id="complexity"
             value={complexity}
-            onChange={(e) => setComplexity(e.target.value as 'simple' | 'regular' | 'complex')}
+            onChange={(e) =>
+              setComplexity(e.target.value as "simple" | "regular" | "complex")
+            }
             className="w-full px-3 py-2 border rounded-md"
           >
             <option value="simple">Simple - Fast, basic extraction</option>
-            <option value="regular">Regular - Balanced speed and accuracy</option>
+            <option value="regular">
+              Regular - Balanced speed and accuracy
+            </option>
             <option value="complex">Complex - Highest accuracy, slower</option>
           </select>
         </div>
-        <button
-          type="submit"
-          disabled={loading || !file}
-          className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
-        >
-          {loading ? 'Processing...' : 'Extract Tables'}
-        </button>
+        <div>
+          <label htmlFor="priority" className="block text-sm font-medium mb-2">
+            Priority
+          </label>
+          <select
+            id="priority"
+            value={priority}
+            onChange={(e) =>
+              setPriority(e.target.value as "high" | "medium" | "low")
+            }
+            className="w-full px-3 py-2 border rounded-md"
+          >
+            <option value="high">High - Process next (jumps queue)</option>
+            <option value="medium">Medium - Normal queue position</option>
+            <option value="low">Low - Process last</option>
+          </select>
+        </div>
+        <div className="flex gap-2">
+          {onCancel && (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onCancel}
+              disabled={loading}
+              className="flex-1"
+            >
+              Cancel
+            </Button>
+          )}
+          <Button type="submit" disabled={loading || !file} className="flex-1">
+            {loading ? "Processing..." : "Extract Tables"}
+          </Button>
+        </div>
       </form>
     </div>
-  )
-}
-
+  );
+};

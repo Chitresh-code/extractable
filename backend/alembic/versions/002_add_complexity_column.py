@@ -1,6 +1,6 @@
 """Add complexity column to extractions table
 
-Revision ID: 002_add_complexity
+Revision ID: 002_add_complexity_column
 Revises: 001_initial
 Create Date: 2026-01-04 12:40:00.000000
 
@@ -9,7 +9,7 @@ from alembic import op
 import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
-revision = '002_add_complexity'
+revision = '002_add_complexity_column'
 down_revision = '001_initial'
 branch_labels = None
 depends_on = None

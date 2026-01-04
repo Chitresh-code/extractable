@@ -3,9 +3,10 @@ Extraction endpoints for API v1.
 Handles file upload, extraction job creation, and result retrieval.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Request, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Request
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
+from sqlalchemy import String, cast
 from typing import Optional, List
 from app.core.database import get_db, SessionLocal
 from app.dependencies import get_current_user, get_current_user_optional_token
@@ -13,8 +14,6 @@ from app.models.user import User
 from app.models.extraction import Extraction
 from app.models.schemas import ExtractionCreate, ExtractionResponse, ExtractionListResponse, ExtractionUpdate
 from app.models.enums import ExtractionStatus, InputType, OutputFormat
-from app.pipeline.extraction_pipeline import run_extraction_pipeline
-import asyncio
 import logging
 
 logger = logging.getLogger(__name__)
@@ -22,50 +21,13 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-async def run_extraction_background(extraction_id: int, file_content: bytes, filename: str):
-    """
-    Background task to run extraction pipeline.
-    Creates its own database session.
-
-    Args:
-        extraction_id: Extraction ID
-        file_content: File content as bytes
-        filename: Original filename
-    """
-    # Create a new database session for the background task
-    db = SessionLocal()
-    try:
-        # Get the extraction record
-        extraction = db.query(Extraction).filter(Extraction.id == extraction_id).first()
-        if not extraction:
-            logger.error(f"Extraction {extraction_id} not found in background task")
-            return
-
-        # Create a file-like object from bytes
-        from io import BytesIO
-        from fastapi import UploadFile
-
-        file_buffer = BytesIO(file_content)
-        file_obj = UploadFile(file=file_buffer, filename=filename)
-
-        # Reset file pointer to beginning
-        file_buffer.seek(0)
-
-        # Run the pipeline
-        await run_extraction_pipeline(db, extraction, file=file_obj)
-    except Exception as e:
-        logger.error(f"Background extraction task failed for extraction {extraction_id}: {str(e)}", exc_info=True)
-    finally:
-        db.close()
-
-
 @router.post("", response_model=ExtractionResponse, status_code=status.HTTP_201_CREATED)
 async def create_extraction(
-    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     columns: Optional[str] = Form(None),
     multiple_tables: bool = Form(False),
     complexity: str = Form("regular"),
+    priority: str = Form("medium"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -100,6 +62,10 @@ async def create_extraction(
     if complexity not in ["simple", "regular", "complex"]:
         complexity = "regular"
 
+    # Validate priority
+    if priority not in ["high", "medium", "low"]:
+        priority = "medium"
+
     # Create extraction record (always save as JSON, format selection happens on download)
     extraction = Extraction(
         user_id=current_user.id,
@@ -110,23 +76,43 @@ async def create_extraction(
         multiple_tables=multiple_tables,
         output_format=OutputFormat.JSON.value,  # Always JSON in database
         complexity=complexity,
+        priority=priority,
     )
 
     db.add(extraction)
     db.commit()
     db.refresh(extraction)
 
-    # Read file content for background task
+    # Read file content for queue
     file_content = await file.read()
     filename = file.filename
 
-    # Add background task to run extraction pipeline
-    # This returns immediately, allowing the API to respond quickly
-    background_tasks.add_task(
-        run_extraction_background, extraction_id=extraction.id, file_content=file_content, filename=filename
+    # Import queue manager
+    from app.services.queue_manager import queue_manager
+    from app.services.event_manager import event_manager
+
+    # Broadcast job created notification
+    await event_manager.broadcast(
+        extraction.id,
+        {
+            "type": "notification",
+            "extraction_id": extraction.id,
+            "title": "Extraction Created",
+            "message": f"Extraction #{extraction.id} has been created and queued",
+            "notification_type": "info",
+        },
     )
 
-    logger.info(f"Started background extraction task for extraction {extraction.id}")
+    # Enqueue extraction with priority
+    await queue_manager.enqueue_extraction(
+        extraction_id=extraction.id,
+        user_id=current_user.id,
+        file_content=file_content,
+        filename=filename,
+        priority=priority,
+    )
+
+    logger.info(f"Enqueued extraction {extraction.id} for user {current_user.id} with priority {priority}")
 
     return extraction
 
@@ -202,14 +188,21 @@ async def stream_extraction_updates(
 
 @router.get("", response_model=ExtractionListResponse)
 async def list_extractions(
-    page: int = 1, page_size: int = 20, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
+    page: int = 1,
+    page_size: int = 20,
+    status: Optional[str] = None,
+    search: Optional[str] = None,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """
-    List user's extraction jobs with pagination.
+    List user's extraction jobs with pagination, filtering, and search.
 
     Args:
         page: Page number (1-indexed)
         page_size: Number of items per page
+        status: Filter by status (pending, processing, completed, failed)
+        search: Search by filename or ID
         current_user: Current authenticated user
         db: Database session
 
@@ -218,16 +211,26 @@ async def list_extractions(
     """
     skip = (page - 1) * page_size
 
-    extractions = (
-        db.query(Extraction)
-        .filter(Extraction.user_id == current_user.id)
-        .order_by(Extraction.created_at.desc())
-        .offset(skip)
-        .limit(page_size)
-        .all()
-    )
+    # Base query
+    query = db.query(Extraction).filter(Extraction.user_id == current_user.id)
 
-    total = db.query(Extraction).filter(Extraction.user_id == current_user.id).count()
+    # Apply status filter
+    if status and status != "all":
+        query = query.filter(Extraction.status == status)
+
+    # Apply search filter
+    if search:
+        search_term = f"%{search}%"
+        query = query.filter(
+            (Extraction.input_filename.ilike(search_term))
+            | (Extraction.id.cast(String).ilike(search_term))
+        )
+
+    # Get total count before pagination
+    total = query.count()
+
+    # Apply pagination and ordering
+    extractions = query.order_by(Extraction.created_at.desc()).offset(skip).limit(page_size).all()
 
     return {"items": extractions, "total": total, "page": page, "page_size": page_size}
 
@@ -320,9 +323,17 @@ async def update_extraction(
     if not extraction:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Extraction not found")
 
-    # Only allow updating metadata if extraction is not processing
+    # Allow updating name even when processing (for user convenience)
+    # Only block other updates if processing
     if extraction.status == ExtractionStatus.PROCESSING.value:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Cannot update extraction while it is processing")
+        # Allow updating input_filename even when processing
+        allowed_fields_when_processing = {"input_filename"}
+        update_fields = set(update_data.keys())
+        if not update_fields.issubset(allowed_fields_when_processing):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot update extraction metadata while it is processing. Only name can be updated."
+            )
 
     # Update fields if provided
     update_data = extraction_update.model_dump(exclude_unset=True)
