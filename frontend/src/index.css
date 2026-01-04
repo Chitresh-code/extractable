@@ -55,6 +55,9 @@
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
   }
+  :root {
+    --muted-foreground: hsl(var(--muted-foreground));
+  }
 }
 
 @layer utilities {
