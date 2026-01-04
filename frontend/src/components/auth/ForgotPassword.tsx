@@ -4,7 +4,7 @@ import { useState } from "react";
 import { authApi } from "../../services/api";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { Field } from "../ui/field";
+import { Field, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 
 export const ForgotPassword: React.FC = () => {
@@ -85,8 +85,10 @@ export const ForgotPassword: React.FC = () => {
                   </p>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <Field label="Email">
+                  <Field>
+                    <FieldLabel htmlFor="email">Email</FieldLabel>
                     <Input
+                      id="email"
                       type="email"
                       placeholder="name@example.com"
                       value={email}

@@ -62,7 +62,7 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
 
     # Send welcome email asynchronously (don't block registration)
     try:
-        await send_welcome_email(new_user.email, new_user.first_name)
+        await send_welcome_email(new_user.email, new_user.first_name, new_user.last_name)
     except Exception as e:
         logger.error(f"Failed to send welcome email: {e}", exc_info=True)
         # Don't fail registration if email fails
@@ -189,7 +189,7 @@ async def forgot_password(forgot_password_data: ForgotPassword, db: Session = De
 
         # Send password reset email
         try:
-            await send_password_reset_email(user.email, reset_token, user.first_name)
+            await send_password_reset_email(user.email, reset_token, user.first_name, user.last_name)
         except Exception as e:
             logger.error(f"Failed to send password reset email: {e}", exc_info=True)
 

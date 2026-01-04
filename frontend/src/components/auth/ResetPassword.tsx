@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { authApi } from "../../services/api";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { Field } from "../ui/field";
+import { Field, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 
 export const ResetPassword: React.FC = () => {
@@ -121,8 +121,10 @@ export const ResetPassword: React.FC = () => {
                 </p>
               </div>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <Field label="New Password">
+                <Field>
+                  <FieldLabel htmlFor="new-password">New Password</FieldLabel>
                   <Input
+                    id="new-password"
                     type={showPasswords ? "text" : "password"}
                     placeholder="Enter new password (min. 8 characters)"
                     value={password}
@@ -132,8 +134,10 @@ export const ResetPassword: React.FC = () => {
                     disabled={loading}
                   />
                 </Field>
-                <Field label="Confirm Password">
+                <Field>
+                  <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
                   <Input
+                    id="confirm-password"
                     type={showPasswords ? "text" : "password"}
                     placeholder="Confirm new password"
                     value={confirmPassword}

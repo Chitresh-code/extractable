@@ -18,13 +18,16 @@ else:
     logger.warning("RESEND_API_KEY not set. Email functionality will be disabled.")
 
 
-async def send_welcome_email(email: str, first_name: Optional[str] = None) -> bool:
+async def send_welcome_email(
+    email: str, first_name: Optional[str] = None, last_name: Optional[str] = None
+) -> bool:
     """
     Send welcome email to newly registered user.
 
     Args:
         email: User's email address
         first_name: User's first name (optional)
+        last_name: User's last name (optional)
 
     Returns:
         True if email was sent successfully, False otherwise
@@ -34,7 +37,13 @@ async def send_welcome_email(email: str, first_name: Optional[str] = None) -> bo
         return False
 
     try:
-        name = first_name or "there"
+        # Format recipient name for email header
+        name_parts = [part for part in [first_name, last_name] if part]
+        full_name = " ".join(name_parts) if name_parts else None
+        recipient = f'"{full_name}" <{email}>' if full_name else email
+        
+        # Format greeting name
+        greeting_name = full_name or first_name or "there"
         subject = "Welcome to Extractable!"
         
         html_content = f"""
@@ -50,7 +59,7 @@ async def send_welcome_email(email: str, first_name: Optional[str] = None) -> bo
                 <h1 style="color: white; margin: 0; font-size: 28px;">Welcome to Extractable!</h1>
             </div>
             <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
-                <p style="font-size: 16px; margin-bottom: 20px;">Hi {name},</p>
+                <p style="font-size: 16px; margin-bottom: 20px;">Hi {greeting_name},</p>
                 <p style="font-size: 16px; margin-bottom: 20px;">
                     Thank you for joining Extractable! We're excited to have you on board.
                 </p>
@@ -79,7 +88,7 @@ async def send_welcome_email(email: str, first_name: Optional[str] = None) -> bo
 
         params = {
             "from": settings.resend_from_email,
-            "to": [email],
+            "to": [recipient],
             "subject": subject,
             "html": html_content,
         }
@@ -93,7 +102,9 @@ async def send_welcome_email(email: str, first_name: Optional[str] = None) -> bo
         return False
 
 
-async def send_password_reset_email(email: str, reset_token: str, first_name: Optional[str] = None) -> bool:
+async def send_password_reset_email(
+    email: str, reset_token: str, first_name: Optional[str] = None, last_name: Optional[str] = None
+) -> bool:
     """
     Send password reset email to user.
 
@@ -101,6 +112,7 @@ async def send_password_reset_email(email: str, reset_token: str, first_name: Op
         email: User's email address
         reset_token: Password reset token
         first_name: User's first name (optional)
+        last_name: User's last name (optional)
 
     Returns:
         True if email was sent successfully, False otherwise
@@ -110,7 +122,13 @@ async def send_password_reset_email(email: str, reset_token: str, first_name: Op
         return False
 
     try:
-        name = first_name or "there"
+        # Format recipient name for email header
+        name_parts = [part for part in [first_name, last_name] if part]
+        full_name = " ".join(name_parts) if name_parts else None
+        recipient = f'"{full_name}" <{email}>' if full_name else email
+        
+        # Format greeting name
+        greeting_name = full_name or first_name or "there"
         reset_url = f"{settings.frontend_url}/reset-password?token={reset_token}"
         subject = "Reset Your Extractable Password"
         
@@ -127,7 +145,7 @@ async def send_password_reset_email(email: str, reset_token: str, first_name: Op
                 <h1 style="color: white; margin: 0; font-size: 28px;">Password Reset Request</h1>
             </div>
             <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
-                <p style="font-size: 16px; margin-bottom: 20px;">Hi {name},</p>
+                <p style="font-size: 16px; margin-bottom: 20px;">Hi {greeting_name},</p>
                 <p style="font-size: 16px; margin-bottom: 20px;">
                     We received a request to reset your password for your Extractable account.
                 </p>
@@ -157,7 +175,7 @@ async def send_password_reset_email(email: str, reset_token: str, first_name: Op
 
         params = {
             "from": settings.resend_from_email,
-            "to": [email],
+            "to": [recipient],
             "subject": subject,
             "html": html_content,
         }
