@@ -16,12 +16,14 @@ A production-grade SaaS platform for extracting structured tables from PDFs and 
 ## Tech Stack
 
 **Backend:**
+
 - FastAPI with Python
 - PostgreSQL (Docker-based)
 - OpenAI API (GPT-5 series)
 - Polars for format conversion
 
 **Frontend:**
+
 - React 18+ with TypeScript
 - Vite
 - shadcn/ui
@@ -37,7 +39,8 @@ A production-grade SaaS platform for extracting structured tables from PDFs and 
 
 ### Docker Setup (Recommended)
 
-1. Set up environment variables in `backend/.env`:
+- Set up environment variables in `backend/.env`:
+
 ```bash
 # Required: OpenAI API Key
 OPENAI_API_KEY=your-openai-api-key-here
@@ -55,17 +58,20 @@ POSTGRES_HOST=postgres
 SECRET_KEY=your-secret-key-change-in-production
 ```
 
-2. Start all services:
+- Start all services:
+
 ```bash
 docker-compose up -d
 ```
 
-3. Access the application:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Docs: http://localhost:8000/docs
+- Access the application:
 
-4. Run database migrations (first time only):
+- Frontend: <http://localhost:3000>
+- Backend API: <http://localhost:8000>
+- API Docs: <http://localhost:8000/docs>
+
+- Run database migrations (first time only):
+
 ```bash
 docker-compose exec backend alembic upgrade head
 ```
@@ -74,58 +80,79 @@ docker-compose exec backend alembic upgrade head
 
 #### Backend Setup
 
-1. Create virtual environment:
+- Create virtual environment:
+
 ```bash
 cd backend
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-2. Install dependencies:
+- Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Set up environment variables in `backend/.env`:
+- Set up environment variables in `backend/.env`:
+
 ```bash
 # Add your OPENAI_API_KEY and other settings (see above)
 ```
 
-4. Start PostgreSQL:
+- Start PostgreSQL:
+
 ```bash
 docker-compose up -d postgres
 ```
 
-5. Run database migrations:
+- Run database migrations:
+
 ```bash
 alembic upgrade head
 ```
 
-6. Start the server:
+- Start the server:
+
 ```bash
 uvicorn app.main:app --reload
 ```
 
 ### Frontend Setup
 
-1. Install dependencies:
+- Install dependencies:
+
 ```bash
 cd frontend
 npm install
 ```
 
-2. Start development server:
+- Start development server:
+
 ```bash
 npm run dev
 ```
 
 ## Documentation
 
-See the [docs/](docs/) directory for detailed documentation:
-- [API Documentation](docs/api.md)
-- [Architecture](docs/architecture.md)
-- [Development Guide](docs/development.md)
-- [Deployment Guide](docs/deployment.md)
+📚 **Start here**: [Documentation Index](docs/README.md) - Complete guide to all documentation
+
+### Core Documentation
+
+- **[Architecture](docs/architecture.md)** - System architecture, component diagrams, and technical overview
+- **[API Documentation](docs/api.md)** - Complete API reference with examples and code snippets
+- **[Development Guide](docs/development.md)** - Setup, development workflow, and best practices
+- **[Deployment Guide](docs/deployment.md)** - Production deployment instructions for `extractable.in` and `api.extractable.in`
+- **[API Versioning](docs/api-versioning.md)** - API versioning strategy and migration guides
+- **[Changelog](docs/CHANGELOG.md)** - Version history and release notes
+
+### Quick Links
+
+- 🚀 **Getting Started**: [Development Guide](docs/development.md#quick-start)
+- 🏗️ **Understanding the System**: [Architecture](docs/architecture.md)
+- 🔌 **API Integration**: [API Documentation](docs/api.md)
+- 🚢 **Deploying to Production**: [Deployment Guide](docs/deployment.md)
+- 📋 **Feature Roadmap**: [TODO.md](TODO.md)
 
 ## License
 
