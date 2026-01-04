@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { toast } from "sonner";
 
 export interface Notification {
   id: string;
@@ -29,6 +30,32 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
       timestamp: Date.now(),
       read: false,
     };
+    
+    // Show toast notification
+    const toastMessage = notification.message || notification.title;
+    switch (notification.type) {
+      case "success":
+        toast.success(notification.title, {
+          description: notification.message,
+        });
+        break;
+      case "error":
+        toast.error(notification.title, {
+          description: notification.message,
+        });
+        break;
+      case "warning":
+        toast.warning(notification.title, {
+          description: notification.message,
+        });
+        break;
+      default:
+        toast.info(notification.title, {
+          description: notification.message,
+        });
+    }
+    
+    // Store in notification log
     set((state) => ({
       notifications: [newNotification, ...state.notifications],
       unreadCount: state.unreadCount + 1,
