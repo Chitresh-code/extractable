@@ -21,9 +21,9 @@ export interface Extraction {
   multiple_tables: boolean
   output_format: 'json' | 'csv' | 'excel'
   complexity: 'simple' | 'regular' | 'complex'
-  table_data?: any // Final structured table data (JSON)
-  llm_extraction_output?: any
-  llm_validation_output?: any
+  table_data?: Record<string, unknown> // Final structured table data (JSON)
+  llm_extraction_output?: Record<string, unknown>
+  llm_validation_output?: Record<string, unknown>
   llm_final_output?: {
     text?: string
     timing_metrics?: {

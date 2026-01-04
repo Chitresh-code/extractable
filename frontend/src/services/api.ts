@@ -89,7 +89,7 @@ export const extractionApi = {
   },
 
   download: async (id: number, outputFormat?: string): Promise<Blob> => {
-    const params: any = {}
+    const params: Record<string, string> = {}
     if (outputFormat) {
       params.output_format = outputFormat
     }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { extractionApi } from '../../services/api'
 import type { Extraction, ExtractionListResponse } from '../../types'
 
@@ -14,11 +14,7 @@ export const History: React.FC<HistoryProps> = ({ onViewExtraction }) => {
   const [downloading, setDownloading] = useState<number | null>(null)
   const [downloadFormat, setDownloadFormat] = useState<Record<number, 'json' | 'csv' | 'excel'>>({})
 
-  useEffect(() => {
-    loadExtractions()
-  }, [page])
-
-  const loadExtractions = async () => {
+  const loadExtractions = useCallback(async () => {
     setLoading(true)
     try {
       const response: ExtractionListResponse = await extractionApi.list(page, 20)
@@ -29,7 +25,11 @@ export const History: React.FC<HistoryProps> = ({ onViewExtraction }) => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page])
+
+  useEffect(() => {
+    loadExtractions()
+  }, [loadExtractions])
 
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this extraction?')) return
