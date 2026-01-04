@@ -32,7 +32,6 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
     };
     
     // Show toast notification
-    const toastMessage = notification.message || notification.title;
     switch (notification.type) {
       case "success":
         toast.success(notification.title, {
