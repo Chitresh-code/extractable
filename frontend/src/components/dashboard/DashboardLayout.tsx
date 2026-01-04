@@ -9,6 +9,7 @@ import { CommandDialog } from "../ui/command";
 import { CommandMenu } from "./CommandMenu";
 import { NotificationCenter } from "./NotificationCenter";
 import { UserMenu } from "./UserMenu";
+import { useGlobalNotifications } from "../../hooks/useGlobalNotifications";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -17,6 +18,8 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { user } = useAuth();
   const [commandOpen, setCommandOpen] = React.useState(false);
+  // Enable global notifications for extraction status changes
+  useGlobalNotifications();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
